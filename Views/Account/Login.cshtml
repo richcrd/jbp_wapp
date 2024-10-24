@@ -31,28 +31,16 @@
         <form asp-controller="Account" asp-action="Login" method="post">
             <div class="form-outline mb-4">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required />
+                <input type="email" class="form-control" id="correo" name="correo" placeholder="name@example.com" required />
             </div>
 
             <div class="form-outline mb-4">
                 <label for="Password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="Password" name="Password" required />
+                <input type="password" class="form-control" id="contrasena" name="contrasena" required />
             </div>
 
             <div class="d-grid">
                 <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-            </div>
-
-            <!-- Opciones de registro -->
-            <div class="text-center">
-                <p>Not a member? <a asp-controller="Account" asp-action="Register">Register</a></p>
-                <p>Or sign in with:</p>
-                <button type="button" class="btn btn-outline-primary btn-floating mx-1">
-                    <i class="fab fa-facebook-f"></i>
-                </button>
-                <button type="button" class="btn btn-outline-primary btn-floating mx-1">
-                    <i class="fab fa-google"></i>
-                </button>
             </div>
         </form>
     </div>

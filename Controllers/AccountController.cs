@@ -1,11 +1,22 @@
 ﻿using jbp_wapp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
+using System.Linq;
+using jbp_wapp.Data;
 
 namespace jbp_wapp.Controllers
 {
     public class AccountController : Controller
     {
-        private static List<UserModel> _userList = new List<UserModel>();
+        private readonly ApplicationDbContext _context;
+
+        public AccountController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         // GET: /Account/Login
         [HttpGet]
@@ -22,28 +33,51 @@ namespace jbp_wapp.Controllers
 
         // POST: /Account/Login
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(string correo, string contrasena)
         {
-            var user = _userList.FirstOrDefault(u => u.Username == username && u.Password == password);
-            if (user != null)
+            try
             {
-                return RedirectToAction("Index", "Home");
+                var usuario = _context.Usuarios.SingleOrDefault(u => u.CorreoUsuario == correo && u.ContrasenaUsuario == contrasena);
+
+                if (usuario != null)
+                {
+                    // Iniciar sesion
+                    Console.WriteLine($"Usuario encontrado: {usuario.NombreUsuario} {usuario.ContrasenaUsuario}");
+                    HttpContext.Session.SetInt32("UsuarioID", usuario.UsuarioID);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    Console.WriteLine("Credenciales incorrectas");
+                }
+                ModelState.AddModelError("", "Correo o contrasena incorrectos");
+                return View();
             }
-            ViewBag.Message = "Invalid credentials";
-            return View();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                ModelState.AddModelError("", "Se produjo un error en el inicio de sesión.");
+                return View();
+            }
         }
 
         // POST: /Account/Signup
         [HttpPost]
-        public IActionResult Signup(string username, string email, string password)
+        public async Task<IActionResult> Signup(Usuario usuario)
         {
-            if (_userList.Any(u => u.Username == username))
+            if (ModelState.IsValid)
             {
-                ViewBag.Message = "User already exists";
-                return View();
+                _context.Usuarios.Add(usuario);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Login", "Account");
             }
-            _userList.Add(new UserModel { Username = username, Email = email, Password = password });
-            return RedirectToAction("Login");
+            return View(usuario);
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

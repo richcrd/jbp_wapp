@@ -1,10 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model Usuario
 
-<h2>Bienvenido al Portal de Empleos Nicaraguense</h2>
+<h2>Bienvenido al Portal de Empleos Nicaraguense, @Model.NombreUsuario</h2>
 
 <p>
     <a asp-controller="Account" asp-action="Login">Login</a>
     <a asp-controller="Account" asp-action="Signup">Signup</a>
+    <a asp-controller="Account" asp-action="Logout">Logout</a>
 </p>
