@@ -4,6 +4,7 @@ using System.Diagnostics;
 using jbp_wapp.Data;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace jbp_wapp.Controllers
 {
@@ -16,25 +17,16 @@ namespace jbp_wapp.Controllers
             _context = context;
         }
 
+        // Acción para la pantalla principal (Index)
         public IActionResult Index()
         {
-            // Verifica si el usuario esta autenticado con la sesion
-            var usuarioID = HttpContext.Session.GetInt32("UsuarioID");
-            if (usuarioID == null)
+            // Verifica si el usuario está autenticado
+            if (HttpContext.Session.GetInt32("UsusarioId") == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account"); // Redirige a la pantalla de inicio de sesión si no está autenticado
             }
 
-            // Busar el usuario autenticado en la BD
-            var usuario = _context.Usuarios.Find(usuarioID);
-
-            if (usuario == null)
-            {
-                // Si el usuario no esta en la BD, redirigir
-                return RedirectToAction("Login", "Account");
-            }
-            // Pasar el usuario a la vista
-            return View(usuario);
+            return View();
         }
 
         public IActionResult Privacy()
