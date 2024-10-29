@@ -1,50 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    ViewData["Title"] = "Login";
+﻿@{
+    ViewData["Title"] = "Iniciar Sesion";
 }
 
-<!-- Incluir el CDN de Bootstrap en la cabecera -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+@model TblUsuario
 
-<!-- Añadir un estilo personalizado para centrar el formulario -->
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    .login-container {
-        margin-top: 100px;
-        max-width: 400px;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-</style>
+<form asp-action="Login" method="post">
+    <label>Correo:</label>
+    <input name="correo" />
+    <label>Contraseña:</label>
+    <input name="contrasena" type="password" />
+    <button type="submit">Ingresar</button>
+    <a asp-controller="Account" asp-action="Signup">No tienes cuenta?</a>
+</form>
 
-<div class="container d-flex justify-content-center">
-    <div class="login-container">
-        <h3 class="text-center mb-4">Login</h3>
-
-        <!-- Formulario de login con Bootstrap -->
-        <form asp-controller="Account" asp-action="Login" method="post">
-            <div class="form-outline mb-4">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="correo" name="correo" placeholder="name@example.com" required />
-            </div>
-
-            <div class="form-outline mb-4">
-                <label for="Password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="contrasena" name="contrasena" required />
-            </div>
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Incluir los scripts de Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
