@@ -7,23 +7,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configuración de la base de datos (reemplaza la cadena de conexión con la tuya)
+// Configuraciï¿½n de la base de datos (reemplaza la cadena de conexiï¿½n con la tuya)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configuración de CORS
+// Configuraciï¿½n de CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
         builder =>
         {
             builder.AllowAnyOrigin() // Permite cualquier origen
-                   .AllowAnyMethod() // Permite cualquier método (GET, POST, etc.)
+                   .AllowAnyMethod() // Permite cualquier mï¿½todo (GET, POST, etc.)
                    .AllowAnyHeader(); // Permite cualquier cabecera
         });
 });
 
-// Configuración de sesión
+// Configuraciï¿½n de sesiï¿½n
 builder.Services.AddSession(options =>
 {
     // Tiempo de expiracion de la sesion
@@ -48,11 +48,11 @@ app.UseStaticFiles();
 // Habilitar CORS
 app.UseCors("AllowAll");
 
-// Habilitar autenticación y autorización
-app.UseRouting();
-
 // Middleware para la sesion
 app.UseSession();
+
+// Habilitar autenticaciï¿½n y autorizaciï¿½n
+app.UseRouting();
 
 app.UseAuthorization();
 

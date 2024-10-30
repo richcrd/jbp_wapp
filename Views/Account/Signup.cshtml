@@ -1,128 +1,86 @@
 ﻿@{
     ViewData["Title"] = "Registro de Usuario";
 }
-@* @model TblUsuario *@
+@model jbp_wapp.Models.Usuario
 
-<h2>Registro</h2>
-
-<form id="registerForm">
-    <label>Nombre</label>
-    <input type="text" id="Nombre" required/>
-
-    <label>Apellido</label>
-    <input type="text" id="Apellido" required/>
-
-    <label>Nombre Usuario</label>
-    <input type="text" id="NombreUsuario" required />
-
-    <label>Correo</label>
-    <input type="email" id="Correo" required />
-
-    <label>Contrasena</label>
-    <input type="password" id="Contrasena" required />
-
-    <label>Roles</label>
-    <select id="Rol" required></select>
-
-    <label>Departamentos</label>
-    <select id="Departamento" required></select>
-
-    <label>Generos</label>
-    <select id="Genero" required></select>
-
-    <button type="button" id="registerButton">Registrar</button>
-    <a asp-controller="Account" asp-action="Login">Ya tienes cuenta?</a>
-</form>
-
-<script>
-    function cargarRoles() {
-        fetch('/Account/GetRoles')
-            .then(response => response.json())
-            .then(data => {
-                const rolSelect = document.getElementById('Rol');
-                rolSelect.innerHTML = '';
-                data.forEach(rol => {
-                    rolSelect.innerHTML += `<option value="${rol.id}">${rol.nombre}</option>`;
-                });
-            })
-            .catch(error => console.error("Error al cargar roles:", error));
-    }
-
-    function cargarDepartamentos() {
-        fetch('/Account/GetDepartamentos')
-            .then(response => response.json())
-            .then(data => {
-                const dptSelect = document.getElementById('Departamento');
-                dptSelect.innerHTML = '';
-                data.forEach(dpto => {
-                    dptSelect.innerHTML += `<option value="${dpto.id}">${dpto.nombre}</option>`;
-                });
-            })
-            .catch(error => console.error("Error al cargar departamentos:", error));
-    }
-
-    function cargarGeneros() {
-        fetch('/Account/GetGeneros')
-            .then(response => response.json())
-            .then(data => {
-                const genSelect = document.getElementById('Genero');
-                genSelect.innerHTML = '';
-                data.forEach(genr => {
-                    genSelect.innerHTML += `<option value="${genr.id}">${genr.nombre}</option>`;
-                });
-            })
-            .catch(error => console.error("Error al cargar géneros:", error));
-    }
-
-    // Función para enviar el formulario con JavaScript
-    function enviarFormulario(event) {
-        event.preventDefault(); // Evitar el envío predeterminado
-
-        const usuarioData = {
-            Nombre: document.getElementById('Nombre').value,
-            Apellido: document.getElementById('Apellido').value,
-            NombreUsuario: document.getElementById('NombreUsuario').value,
-            Correo: document.getElementById('Correo').value,
-            Contrasena: document.getElementById('Contrasena').value,
-            IdRol: parseInt(document.getElementById('Rol').value, 10),
-            IdDepartamento: parseInt(document.getElementById('Departamento').value, 10),
-            IdGenero: parseInt(document.getElementById('Genero').value, 10)
-        };
-        console.log(usuarioData);
-        // Validar si algún campo está vacío
-        if (!usuarioData.Nombre || !usuarioData.Apellido || !usuarioData.NombreUsuario || !usuarioData.Correo || !usuarioData.Contrasena || !usuarioData.IdRol || !usuarioData.IdDepartamento || !usuarioData.IdGenero) {
-            alert("Por favor complete todos los campos");
-            return;
-        }
-
-        fetch('/Account/Signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(usuarioData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert("Usuario registrado correctamente");
-                    limpiarCampos();
-                } else {
-                    alert("Error al registrar usuario");
-                    limpiarCampos();
-                }
-            })
-            .catch(error => console.error("Error:", error));
-    }
-
-    // Función para limpiar los campos del formulario
-    function limpiarCampos() {
-        document.getElementById('registerForm').reset();
-    }
-
-    // Cargar los datos y añadir evento al botón de registro cuando se carga la página
-    document.addEventListener('DOMContentLoaded', function () {
-        cargarRoles();
-        cargarDepartamentos();
-        cargarGeneros();
-        document.getElementById('registerButton').addEventListener('click', enviarFormulario);
-    });
-
-</script>
+<section class="h-100 h-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card rounded-3">
+                    @* <img src=""
+                         class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                         alt="Sample photo"> *@
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registrar Cuenta</h3>
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                        }
+                        <form id="registerForm" class="px-md-2" asp-action="Signup" method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Nombre</label>
+                                        <input name="Nombre" class="form-control" type="text" id="Nombre" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label>Apellido</label>
+                                    <input name="Apellido" class="form-control" type="text" id="Apellido" required />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Nombre Usuario</label>
+                                    <input name="NombreUsuario" class="form-control" type="text" id="NombreUsuario" required />
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Correo</label>
+                                    <input name="Correo" class="form-control" type="email" id="Correo" required />
+                                </div>
+                            </div>
+                            <div class="form-outline mb-2">
+                                <label class="form-label">Contrasena</label>
+                                <input name="Contrasena" class="form-control" type="password" id="Contrasena" required />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class ="form-label">Roles</label>
+                                    <select name="IdRol" class="form-control" id="Rol" required>
+                                        @foreach (var rol in ViewBag.Roles as List<jbp_wapp.Models.Rol> ?? new List<jbp_wapp.Models.Rol>())
+                                        {
+                                            <option value="@rol.Id">@rol.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Departamentos</label>
+                                    <select name="IdDepartamento" class="form-control" id="Departamento" required>
+                                        @foreach (var dpto in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
+                                        {
+                                            <option value="@dpto.Id">@dpto.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label">Generos</label>
+                                    <select name="IdGenero" class="form-control" id="Genero" required>
+                                        @foreach (var genr in ViewBag.Generos as List<jbp_wapp.Models.Genero> ?? new List<jbp_wapp.Models.Genero>())
+                                        {
+                                            <option value="@genr.Id">@genr.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" id="registerButton" class="btn btn-primary btn-block">Registrar</button>
+                            <div class="text-center mt-3">
+                                <a asp-controller="Account" asp-action="Login">Ya tienes cuenta?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -20,12 +20,17 @@ namespace jbp_wapp.Controllers
         // Acción para la pantalla principal (Index)
         public IActionResult Index()
         {
+            var userId = HttpContext.Session.GetInt32("UsuarioId");
+            Console.WriteLine($"Usuario ID en sesión: {userId}");
+
             // Verifica si el usuario está autenticado
-            if (HttpContext.Session.GetInt32("UsusarioId") == null)
+            if (userId == null)
             {
                 return RedirectToAction("Login", "Account"); // Redirige a la pantalla de inicio de sesión si no está autenticado
             }
-
+            // Obtener el nombre del usuario de la sesión
+            var usuarioNombre = HttpContext.Session.GetString("UsuarioNombre");
+            ViewData["UsuarioNombre"] = usuarioNombre;
             return View();
         }
 

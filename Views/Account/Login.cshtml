@@ -2,54 +2,36 @@
     ViewData["Title"] = "Iniciar Sesion";
 }
 
-@* @model TblUsuario *@
+@model jbp_wapp.Models.LoginViewModel
 
-<h2>Inicio de sesion</h2>
-
-<form id="loginForm">
-    <label>Correo</label>
-    <input type="email" id="Correo" required />
-
-    <label>Contrasena</label>
-    <input type="password" id="Contrasena" required />
-
-    <button type="button" id="loginButton">Iniciar sesion</button>
-    <a asp-controller="Account" asp-action="Signup">No tienes cuenta?</a>
-</form>
-<script>
-    document.getElementById('loginButton').addEventListener('click', function () {
-        const loginData: {
-            correo: document.getElementById('Correo').value,
-            contrasena: document.getElementById('Contrasena').value
-        };
-
-        if (!loginData.correo || !loginData.contrasena) {
-            alert("Por favor complete todos los campos");
-            return;
-        }
-
-        fetch('/Account/Login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginData)
-        })
-            .then(response => {
-                if (response.ok {
-                    alert("Inicio de sesion exitoso"));
-                    window.location.href = "/Home/Index"
-            } else {
-                alert("Correo o contrasena incorrectos");
-            }
-            })
-        .catch(error => console.error('Error', error));
-    });
-</script>
-@* <form asp-action="Login" method="post">
-    <label>Correo:</label>
-    <input name="correo" />
-    <label>Contraseña:</label>
-    <input name="contrasena" type="password" />
-    <button type="submit">Ingresar</button>
-    <a asp-controller="Account" asp-action="Signup">No tienes cuenta?</a>
-</form> *@
-
+<section class="h-100 h-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-6 col-xl-4">
+                <div class="card rounded-3">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Iniciar Sesión</h3>
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                        }
+                        <form id="loginForm" class="px-md-2" asp-controller="Account" asp-action="Login" method="post">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Correo</label>
+                                <input name="Correo" class="form-control" type="email" id="Correo" required />
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Contraseña</label>
+                                <input name="Contrasena" class="form-control" type="password" id="Contrasena" required />
+                            </div>
+                            <button type="submit" id="loginButton" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                            <div class="text-center mt-3">
+                                <a asp-controller="Account" asp-action="Signup">No tienes cuenta?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
