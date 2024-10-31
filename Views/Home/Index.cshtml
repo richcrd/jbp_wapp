@@ -1,9 +1,21 @@
 ﻿@{
     ViewData["Title"] = "Inicio";
 }
-<h2>Bienvenido, @ViewData["UsuarioNombre"]</h2>
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+<h2>Bienvenido, @ViewData["UsuarioNombre"], Rol: @ViewData["UsuarioRol"]</h2>
 <p>
     <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
     <a asp-controller="Account" asp-action="Signup" class="btn btn-warning">Signup</a>
     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+    @if (ViewBag.UsuarioRol != null && Convert.ToInt32(ViewBag.UsuarioRol) == 3)
+    {
+        <a asp-controller="Vacante" asp-action="Index" class="btn btn-danger">Vacante</a>
+    }
+    else
+    {
+        <p>Usuario no autorizado</p>
+    }
 </p>

@@ -30,7 +30,9 @@ namespace jbp_wapp.Controllers
             }
             // Obtener el nombre del usuario de la sesión
             var usuarioNombre = HttpContext.Session.GetString("UsuarioNombre");
+            var usuarioRol = HttpContext.Session.GetInt32("UsuarioRol");
             ViewData["UsuarioNombre"] = usuarioNombre;
+            ViewData["UsuarioRol"] = usuarioRol;
             return View();
         }
 

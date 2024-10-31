@@ -1,0 +1,8 @@
+@model jbp_wapp.Models.Vacante
+<h1>Eliminar Vacante</h1>
+<p>¿Está seguro que desea eliminar la vacante "@Model.Titulo"?</p>
+<form asp-action="DeleteConfirmed" method="post">
+    <input asp-for="Id" type="hidden" />
+    <button type="submit">Eliminar</button>
+    <a asp-action="Index">Cancelar</a>
+</form>

@@ -1,0 +1,32 @@
+@model jbp_wapp.Models.Vacante
+<h1>Crear Nueva Vacante</h1>
+<form asp-action="Create" method="post">
+    <div>
+        <label>Título</label>
+        <input asp-for="Titulo" />
+        <span asp-validation-for="Titulo"></span>
+    </div>
+    <div>
+        <label>Descripción</label>
+        <input asp-for="Descripcion" />
+        <span asp-validation-for="Descripcion"></span>
+    </div>
+    <select name="IdExperiencia" class="form-control" required>
+        @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+        {
+            <option value="@exp.Id">@exp.Descripcion</option>
+        }
+    </select>
+    <select name="IdProfesion" class="form-control" required>
+        @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+        {
+            <option value="@pf.Id">@pf.Nombre</option>
+        }
+    </select>
+    <div>
+        <label>Fecha de Cierre</label>
+        <input asp-for="FechaCierre" type="date" />
+        <span asp-validation-for="FechaCierre"></span>
+    </div>
+    <button type="submit">Guardar</button>
+</form>

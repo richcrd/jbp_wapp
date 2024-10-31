@@ -86,6 +86,7 @@ namespace jbp_wapp.Controllers
                 Console.WriteLine($"Estableciendo UsuarioId en sesión: {usuario.Id}");
                 HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
                 HttpContext.Session.SetString("UsuarioNombre", usuario.NombreUsuario);
+                HttpContext.Session.SetInt32("UsuarioRol", usuario.Rol);
 
                 return RedirectToAction("Index", "Home");
             }
