@@ -34,7 +34,16 @@ namespace jbp_wapp.Controllers
         public async Task<IActionResult> Index()
         {
           await CargarDatos();
+          var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+          if (userIdClaim == null) 
+          {
+            // Manejar aqui cuando no se pudo obtener
+            return RedirectToAction("Login", "Account");
+          }
+          var userId = int.Parse(userIdClaim.Value);
+
             var vacantes = await _context.Vacantes
+                .Where(v => v.IdUsuario == userId)
                 .Include(v => v.Usuario)
                 .Include(v => v.Profesion)
                 .Include(v => v.Experiencia)
