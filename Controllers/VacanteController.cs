@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace jbp_wapp.Controllers
 {
+    [Authorize(Roles = "3")]
     public class VacanteController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -51,13 +53,7 @@ namespace jbp_wapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Vacante vacante)
         {
-            // Verificar si el usuario autenticado es reclutador
-            if (HttpContext.Session.GetInt32("UsuarioRol") != 3)
-            {
-                await CargarDatos();
-                ViewBag.ErrorMessage = "Usuario no autorizado por rol";
-                return Unauthorized();
-            }
+            await CargarDatos();
 
             if (ModelState.IsValid)
             {
@@ -67,7 +63,6 @@ namespace jbp_wapp.Controllers
                 _context.Add(vacante);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Vacante");
-                //return RedirectToAction(nameof(Index));
             }
             return View(vacante);
         }

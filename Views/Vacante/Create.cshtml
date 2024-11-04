@@ -39,6 +39,9 @@
         <input class="form-control" asp-for="FechaCierre" type="date" />
         <span asp-validation-for="FechaCierre"></span>
     </div>
-    <button class="btn btn-primary mt-3" type="submit">Guardar</button>
+    <div class="btn-group mt-3 gap-2">
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-secondary" onclick="history.back()">Cancelar</button>
+    </div>
 </form>
 </div>

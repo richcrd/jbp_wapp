@@ -5,6 +5,10 @@ using jbp_wapp.Data;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace jbp_wapp.Controllers
 {
@@ -18,21 +22,23 @@ namespace jbp_wapp.Controllers
         }
 
         // Acción para la pantalla principal (Index)
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = HttpContext.Session.GetInt32("UsuarioId");
-            Console.WriteLine($"Usuario ID en sesión: {userId}");
-
             // Verifica si el usuario está autenticado
-            if (userId == null)
+            if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account"); // Redirige a la pantalla de inicio de sesión si no está autenticado
             }
-            // Obtener el nombre del usuario de la sesión
-            var usuarioNombre = HttpContext.Session.GetString("UsuarioNombre");
-            var usuarioRol = HttpContext.Session.GetInt32("UsuarioRol");
-            ViewData["UsuarioNombre"] = usuarioNombre;
-            ViewData["UsuarioRol"] = usuarioRol;
+
+            // Extraer los datos del usuario autenticado desde los claims
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+            var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+            ViewData["UserId"] = userId;
+            ViewData["UserName"] = userName;
+            ViewData["UserRole"] = userRole;
+
             return View();
         }
 

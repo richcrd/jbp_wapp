@@ -33,7 +33,7 @@ namespace jbp_wapp.Controllers
         public async Task<IActionResult> Signup()
         {
             // Si el usuario ya esta autenticado
-            if (User.Identity.IsAuthenticated) 
+            if (User.Identity != null && User.Identity.IsAuthenticated) 
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -46,7 +46,7 @@ namespace jbp_wapp.Controllers
         public IActionResult Login()
         {
             // Si el usuario ya esta autenticado
-            if (User.Identity.IsAuthenticated) 
+            if (User.Identity != null && User.Identity.IsAuthenticated) 
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -99,10 +99,24 @@ namespace jbp_wapp.Controllers
             
             if (usuario != null)
             {
-                Console.WriteLine($"Estableciendo UsuarioId en sesión: {usuario.Id}");
-                HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
-                HttpContext.Session.SetString("UsuarioNombre", usuario.NombreUsuario);
-                HttpContext.Session.SetInt32("UsuarioRol", usuario.Rol);
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.NombreUsuario),
+                    new Claim(ClaimTypes.Role, usuario.Rol.ToString())
+                };
+                 // Imprimir el rol del usuario en la consola
+                Console.WriteLine($"Rol del usuario: {usuario.Rol}");
+                // Crear la identidad y el principal del usuario
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true, // Mantener la sesión activa entre cierres de navegador
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1) // Duración de la sesión
+                };
+
+                // Autenticar el usuario
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -112,16 +126,18 @@ namespace jbp_wapp.Controllers
         }
 
         [Authorize]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Remove("UsuarioId");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
 
         // Cache de datos para evitar consultas repetitivas
         public async Task CargarDatos()
         {
-            ViewBag.Roles = await _context.Roles.ToListAsync();
+            ViewBag.Roles = await _context.Roles
+            .Where(r => r.Nombre != "admin")
+            .ToListAsync();
             ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
             ViewBag.Generos = await _context.Generos.ToListAsync();
         }
