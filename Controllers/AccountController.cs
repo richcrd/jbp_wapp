@@ -12,6 +12,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace jbp_wapp.Controllers
 {
@@ -24,16 +28,28 @@ namespace jbp_wapp.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Signup()
         {
+            // Si el usuario ya esta autenticado
+            if (User.Identity.IsAuthenticated) 
+            {
+                return RedirectToAction("Index", "Home");
+            }
             await CargarDatos();
             return View();
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
+            // Si el usuario ya esta autenticado
+            if (User.Identity.IsAuthenticated) 
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -95,9 +111,10 @@ namespace jbp_wapp.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
+            HttpContext.Session.Remove("UsuarioId");
             return RedirectToAction("Login", "Account");
         }
 

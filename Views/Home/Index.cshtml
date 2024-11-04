@@ -12,7 +12,7 @@
     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
     @if (ViewBag.UsuarioRol != null && Convert.ToInt32(ViewBag.UsuarioRol) == 3)
     {
-        <a asp-controller="Vacante" asp-action="Index" class="btn btn-danger">Vacante</a>
+        <a asp-controller="Vacante" asp-action="Index" class="btn btn-primary">Vacantes</a>
     }
     else
     {

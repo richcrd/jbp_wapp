@@ -1,32 +1,44 @@
 @model jbp_wapp.Models.Vacante
-<h1>Crear Nueva Vacante</h1>
+<h1 class="text-center">Crear Nueva Vacante</h1>
+<div class="container-fluid p-3">
 <form asp-action="Create" method="post">
-    <div>
-        <label>Título</label>
-        <input asp-for="Titulo" />
-        <span asp-validation-for="Titulo"></span>
+    <div class="row mt-4">
+        <div class="mb-3 col">
+            <label class="form-label">Título</label>
+            <input class="form-control" asp-for="Titulo" />
+            <span asp-validation-for="Titulo"></span>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Descripción</label>
+            <input class="form-control" asp-for="Descripcion" />
+            <span asp-validation-for="Descripcion"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3 col">
+            <label class="form-label">Experiencia Requerida</label>
+            <select name="IdExperiencia" class="form-select" required>
+                @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+                {
+                    <option value="@exp.Id">@exp.Descripcion</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Profesión Requerida</label>
+            <select name="IdProfesion" class="form-select" required>
+                @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+                {
+                    <option value="@pf.Id">@pf.Nombre</option>
+                }
+            </select>
+        </div>
     </div>
     <div>
-        <label>Descripción</label>
-        <input asp-for="Descripcion" />
-        <span asp-validation-for="Descripcion"></span>
-    </div>
-    <select name="IdExperiencia" class="form-control" required>
-        @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
-        {
-            <option value="@exp.Id">@exp.Descripcion</option>
-        }
-    </select>
-    <select name="IdProfesion" class="form-control" required>
-        @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
-        {
-            <option value="@pf.Id">@pf.Nombre</option>
-        }
-    </select>
-    <div>
-        <label>Fecha de Cierre</label>
-        <input asp-for="FechaCierre" type="date" />
+        <label class="form-label">Fecha de Cierre</label>
+        <input class="form-control" asp-for="FechaCierre" type="date" />
         <span asp-validation-for="FechaCierre"></span>
     </div>
-    <button type="submit">Guardar</button>
+    <button class="btn btn-primary mt-3" type="submit">Guardar</button>
 </form>
+</div>

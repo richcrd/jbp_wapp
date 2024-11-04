@@ -77,8 +77,9 @@ namespace jbp_wapp.Controllers
             ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
             ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
         }
-        /*
+
         // GET: Vacante/Details/{id} - Muestra los detalles de una vacante
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var vacante = await _context.Vacantes
@@ -94,6 +95,7 @@ namespace jbp_wapp.Controllers
         }
 
          // Acción para mostrar el formulario de edición
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var vacante = await _context.Vacantes.FindAsync(id);
@@ -138,6 +140,7 @@ namespace jbp_wapp.Controllers
         }
 
         // Acción para eliminar una vacante
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var vacante = await _context.Vacantes.FindAsync(id);
@@ -156,12 +159,12 @@ namespace jbp_wapp.Controllers
             var vacante = await _context.Vacantes.FindAsync(id);
             _context.Vacantes.Remove(vacante);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Vacante");
         }
 
         private bool VacanteExists(int id)
         {
             return _context.Vacantes.Any(e => e.Id == id);
-        } */
+        }
     }
 }
