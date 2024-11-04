@@ -2,7 +2,7 @@
     ViewData["Title"] = "Registro de Usuario";
 }
 @model jbp_wapp.Models.Usuario
-
+@Html.Partial("Loading")
 <section class="h-100 h-custom">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -46,7 +46,7 @@
                             </div>
                             <div class="row">
                                 <div class="col mb-2">
-                                    <label class ="form-label">Selecciona un Rol</label>
+                                    <label class ="form-label">Rol</label>
                                     <select name="IdRol" class="form-control" id="Rol" required>
                                         @foreach (var rol in ViewBag.Roles as List<jbp_wapp.Models.Rol> ?? new List<jbp_wapp.Models.Rol>())
                                         {
@@ -55,7 +55,7 @@
                                     </select>
                                 </div>
                                 <div class="col mb-2">
-                                    <label class="form-label">Selecciona un Departamento</label>
+                                    <label class="form-label">Departamento</label>
                                     <select name="IdDepartamento" class="form-control" id="Departamento" required>
                                         @foreach (var dpto in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
                                         {

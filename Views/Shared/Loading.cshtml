@@ -1,0 +1,14 @@
+<div id="loading" style="display:none;">
+    <div class="spinner"></div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+      form.addEventListener('submit', () => {
+        document.getElementById('loading').style.display = 'flex';
+      });
+    });
+  });
+</script>
+  

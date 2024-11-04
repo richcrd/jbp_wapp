@@ -13,6 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace jbp_wapp.Controllers
 {
@@ -58,8 +61,17 @@ namespace jbp_wapp.Controllers
             if (ModelState.IsValid)
             {
                 await CargarDatos();
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if(userIdClaim != null)
+                {
+                    vacante.IdUsuario = int.Parse(userIdClaim.Value);
+                }
+                else 
+                {
+                    ModelState.AddModelError("", "Nose pudo obtener el Id del usuario");
+                    return View(vacante);
+                }
                 vacante.FechaCreacion = DateTime.Now;
-                vacante.IdUsuario = HttpContext.Session.GetInt32("UsuarioId").Value;
                 _context.Add(vacante);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Vacante");
