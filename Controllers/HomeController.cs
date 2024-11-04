@@ -39,6 +39,10 @@ namespace jbp_wapp.Controllers
             ViewData["UserName"] = userName;
             ViewData["UserRole"] = userRole;
 
+            ViewBag.VacantesRecomendadas = await _context.Vacantes
+                .Where(v => v.IdExperiencia == 1)
+                .ToListAsync();
+
             return View();
         }
 

@@ -1,5 +1,7 @@
+
 html {
   font-size: 14px;
+  font-family: "Poppins", sans-serif;
 }
 
 @media (min-width: 768px) {
@@ -15,4 +17,49 @@ html {
 
 body {
   margin-bottom: 60px;
+  font-family: "Poppins", sans-serif;
+}
+
+.card {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-body a {
+  width: 50%;
+}
+
+.hero {
+  background-image: url('/hero_img.png');
+  background-size: cover; 
+  background-position: center; 
+  height: 450px; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+}
+.bold {
+  font-weight: 600;
+}
+.fade-text {
+  animation: fadeOpacity 5s infinite;
+}
+@keyframes fadeOpacity {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
