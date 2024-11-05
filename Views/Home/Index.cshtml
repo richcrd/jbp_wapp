@@ -7,7 +7,7 @@
     <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
 }
 
-<!-- Hero Section -->
+<!-- Seccion Hero -->
 <div class="hero">
     <div class="container">
         <h2>Bienvenido, @ViewData["UserName"]</h2>
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<!-- Recommended Vacancies Section -->
+<!-- Seccion de Vacantes Recomendadas -->
 <div class="recommended-vacancies mt-5">
     <div class="container">
         <h2 class="mb-4 text-center">Vacantes Recomendadas</h2>
@@ -25,7 +25,7 @@
             @foreach (var vacante in ViewBag.VacantesRecomendadas)
             {
                 <div class="col-md-4 mb-3">
-                    <div class="card">
+                    <div class="card border-dark">
                         <div class="card-body">
                             <h5 class="card-title">@vacante.Titulo</h5>
                             <p class="card-text text-secondary">@vacante.Descripcion</p>

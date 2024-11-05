@@ -53,7 +53,7 @@ namespace jbp_wapp.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize] // Autoriza a cualquier usuario pero que este autenticado
         public async Task<IActionResult> All()
         {
             var vacantes = await _context.Vacantes

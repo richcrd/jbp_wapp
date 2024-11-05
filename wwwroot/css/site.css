@@ -3,6 +3,11 @@ html {
   font-size: 14px;
   font-family: "Poppins", sans-serif;
 }
+.root-container {
+  max-width: 2200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
 
 @media (min-width: 768px) {
   html {
@@ -40,6 +45,7 @@ body {
   background-size: cover; 
   background-position: center; 
   height: 450px; 
+  margin: 0 auto;
   display: flex;
   align-items: center; 
   justify-content: center;
