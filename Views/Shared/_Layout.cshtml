@@ -26,9 +26,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Vacante" asp-action="All">Vacantes</a>
+                        </li>
                         @if (User.IsInRole("3")){
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Vacante" asp-action="Index">Vacante</a>
+                                <a class="nav-link text-white" asp-area="" asp-controller="Vacante" asp-action="Index">Crear Vacante</a>
                             </li>
                         }
                     </ul>

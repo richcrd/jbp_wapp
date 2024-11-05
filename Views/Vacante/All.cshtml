@@ -1,0 +1,28 @@
+@model IEnumerable<jbp_wapp.Models.Vacante>
+@{
+    ViewData["Title"] = "Todas las Vacantes";
+}
+
+<h1 class="text-center">Todas las Vacantes</h1>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var vacante in Model)
+    {
+        <div class="col-md-4">
+            <div class="card h-100 mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@vacante.Titulo</h5>
+                    <p class="card-text">@vacante.Descripcion</p>
+                    <p class="card-text"><small class="text-muted">Reclutador: @vacante.Usuario.Nombre @vacante.Usuario.Apellido</small></p>
+                    <p class="card-text"><small class="text-muted">Fecha de Creación: @vacante.FechaCreacion.ToString("dd/MM/yyyy")</small></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group gap-3">
+                            <a class="btn btn-primary btn-sm">Aplicar</a>
+                            <a asp-controller="Vacante" asp-action="Details" asp-route-id="@vacante.Id" class="btn btn-outline-primary btn-sm">Detalles</a>
+                            <!-- Si deseas agregar más acciones, puedes hacerlo aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

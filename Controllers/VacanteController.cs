@@ -52,6 +52,19 @@ namespace jbp_wapp.Controllers
             return View(vacantes);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> All()
+        {
+            var vacantes = await _context.Vacantes
+                .Include(v => v.Usuario)
+                .Include(v => v.Profesion)
+                .Include(v => v.Experiencia)
+                .ToListAsync();
+
+            return View(vacantes);
+        }
+        
         // GET: Vacante/Create - Muestra el formulario de creación de vacantes
         [HttpGet]
         public async Task<IActionResult> Create()
