@@ -141,5 +141,11 @@ namespace jbp_wapp.Controllers
             ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
             ViewBag.Generos = await _context.Generos.ToListAsync();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AccessDenied()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,29 @@
+@model jbp_wapp.Models.PerfilPostulante
+
+<h2>Mi Perfil</h2>
+
+<div>
+    <h3>Información Personal</h3>
+    <p><strong>Nombre de Usuario:</strong> @Model.Usuario.NombreUsuario</p>
+    <p><strong>Profesión:</strong> @Model.Profesion.Nombre</p>
+    <p><strong>Experiencia:</strong> @Model.Experiencia.Descripcion</p>
+</div>
+
+<div>
+    <h3>CV</h3>
+    @if (Model.CV != null && Model.CV.Length > 0)
+    {
+        <p>CV subido.</p>
+    }
+    else
+    {
+        <p>No se ha subido un CV.</p>
+    }
+</div>
+
+<a asp-action="Edit" class="btn btn-primary">Editar Perfil</a>
+<form asp-action="UploadCV" enctype="multipart/form-data" method="post">
+    <label for="cvFile">Subir CV:</label>
+    <input type="file" id="cvFile" name="cvFile" />
+    <button type="submit" class="btn btn-success">Subir</button>
+</form>

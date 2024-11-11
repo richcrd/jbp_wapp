@@ -13,7 +13,7 @@ namespace jbp_wapp.Data
         public DbSet<Genero> Generos { get; set; }
         public DbSet<Experiencia> Experiencias { get; set; }
         public DbSet<Profesion> Profesiones { get; set; }
-        public DbSet<PerfilPostulante> PerfilPostulantes { get; set; }
+        public DbSet<PerfilPostulante> PerfilPostulante { get; set; }
         public DbSet<Vacante> Vacantes { get; set; }
         public DbSet<Aplicacion> Aplicaciones { get; set; }
         public DbSet<EstadosAplicacion> EstadosAplicaciones { get; set; }

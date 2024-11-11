@@ -19,7 +19,7 @@ using System.Security.Claims;
 
 namespace jbp_wapp.Controllers
 {
-    [Authorize(Roles = "3")]
+    
     public class VacanteController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,6 +31,7 @@ namespace jbp_wapp.Controllers
 
         // GET: Vacante/Index - Muestra todas las vacantes
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Index()
         {
           await CargarDatos();
@@ -51,9 +52,8 @@ namespace jbp_wapp.Controllers
 
             return View(vacantes);
         }
-
-        [HttpGet]
-        [Authorize] // Autoriza a cualquier usuario pero que este autenticado
+        [Authorize(Roles = "1")]
+        [HttpGet] // Autoriza a cualquier usuario pero que este autenticado
         public async Task<IActionResult> All()
         {
             var vacantes = await _context.Vacantes
@@ -67,6 +67,7 @@ namespace jbp_wapp.Controllers
         
         // GET: Vacante/Create - Muestra el formulario de creación de vacantes
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Create()
         {
             await CargarDatos();
@@ -76,6 +77,7 @@ namespace jbp_wapp.Controllers
         // POST: Vacante/Create - Permite a los reclutadores crear una vacante
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Create(Vacante vacante)
         {
             await CargarDatos();
@@ -109,6 +111,7 @@ namespace jbp_wapp.Controllers
 
         // GET: Vacante/Details/{id} - Muestra los detalles de una vacante
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Details(int id)
         {
             var vacante = await _context.Vacantes
@@ -125,6 +128,7 @@ namespace jbp_wapp.Controllers
 
          // Acción para mostrar el formulario de edición
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Edit(int id)
         {
             var vacante = await _context.Vacantes.FindAsync(id);
@@ -138,6 +142,7 @@ namespace jbp_wapp.Controllers
         // Acción para procesar el formulario de edición
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Edit(int id, Vacante vacante)
         {
             if (id != vacante.Id)
@@ -170,6 +175,7 @@ namespace jbp_wapp.Controllers
 
         // Acción para eliminar una vacante
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<IActionResult> Delete(int id)
         {
             var vacante = await _context.Vacantes.FindAsync(id);
@@ -182,6 +188,7 @@ namespace jbp_wapp.Controllers
 
         // Acción para confirmar la eliminación
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "3")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

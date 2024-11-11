@@ -1,0 +1,28 @@
+@model jbp_wapp.Models.PerfilPostulante
+
+<h1>Editar Perfil del Postulante</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="IdProfesion">Profesión</label>
+        <select asp-for="IdProfesion" class="form-control" asp-items="@(new SelectList(ViewBag.Profesiones, "Id", "Nombre"))">
+            <option value="">Seleccione una profesión</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="IdExperiencia">Experiencia</label>
+        <select asp-for="IdExperiencia" class="form-control" asp-items="@(new SelectList(ViewBag.Experiencias, "Id", "Nombre"))">
+            <option value="">Seleccione la experiencia</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="cvFile">CV (PDF)</label>
+        <input type="file" asp-for="CV" class="form-control" name="cvFile" accept=".pdf" />
+        <small class="form-text text-muted">Si desea actualizar su CV, suba un nuevo archivo.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
