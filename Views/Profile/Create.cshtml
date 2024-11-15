@@ -1,0 +1,38 @@
+@model jbp_wapp.Models.PerfilPostulante
+
+@{
+    ViewBag.Title = "Crear Perfil de Postulante";
+}
+
+<h2>Crear Perfil de Postulante</h2>
+
+<form method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="IdProfesion">Profesión</label>
+        <select name="IdProfesion" class="form-control" id="IdProfesion" required>
+            @foreach (var profesion in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+            {
+                <option value="@profesion.Id">@profesion.Nombre</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="IdExperiencia">Experiencia</label>
+        <select name="IdExperiencia" class="form-control" id="IdExperiencia" required>
+            @foreach (var experiencia in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+            {
+                <option value="@experiencia.Id">@experiencia.Descripcion</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="CvFile">Subir CV (opcional)</label>
+        <input type="file" name="cvFile" class="form-control" id="CvFile" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Crear Perfil</button>
+</form>

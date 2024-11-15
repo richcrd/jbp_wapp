@@ -1,28 +1,78 @@
 @model jbp_wapp.Models.PerfilPostulante
 
-<h1>Editar Perfil del Postulante</h1>
+@{
+    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+}
 
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="IdProfesion">Profesión</label>
-        <select asp-for="IdProfesion" class="form-control" asp-items="@(new SelectList(ViewBag.Profesiones, "Id", "Nombre"))">
-            <option value="">Seleccione una profesión</option>
-        </select>
-    </div>
+<h2>@(userRole == "2" ? "Editar Perfil de Postulante" : "Editar Información Básica")</h2>
 
-    <div class="form-group">
-        <label for="IdExperiencia">Experiencia</label>
-        <select asp-for="IdExperiencia" class="form-control" asp-items="@(new SelectList(ViewBag.Experiencias, "Id", "Nombre"))">
-            <option value="">Seleccione la experiencia</option>
-        </select>
-    </div>
+<form method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label for="cvFile">CV (PDF)</label>
-        <input type="file" asp-for="CV" class="form-control" name="cvFile" accept=".pdf" />
-        <small class="form-text text-muted">Si desea actualizar su CV, suba un nuevo archivo.</small>
-    </div>
+    @if (userRole == "2")
+    {
+        <div class="form-group">
+            <label for="IdProfesion">Profesión</label>
+            <select name="IdProfesion" class="form-control" id="IdProfesion" required>
+                @foreach (var profesion in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+                {
+                    <option value="@profesion.Id" @(Model.IdProfesion == profesion.Id ? "selected" : "")>@profesion.Nombre</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="IdExperiencia">Experiencia</label>
+            <select name="IdExperiencia" class="form-control" id="IdExperiencia" required>
+                @foreach (var experiencia in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+                {
+                    <option value="@experiencia.Id" @(Model.IdExperiencia == experiencia.Id ? "selected" : "")>@experiencia.Descripcion</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="IdDepartamento">Departamento</label>
+            <select name="IdDepartamento" class="form-control" id="IdDepartamento" required>
+                @foreach (var departamento in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
+                {
+                    <option value="@departamento.Id" @(Model.Usuario.IdDepartamento == departamento.Id ? "selected" : "")>@departamento.Nombre</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="CvFile">Subir CV (opcional)</label>
+            <input type="file" name="cvFile" class="form-control" id="CvFile" />
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input type="text" name="Nombre" class="form-control" id="Nombre" value="@Model.Nombre" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Apellido">Apellido</label>
+            <input type="text" name="Apellido" class="form-control" id="Apellido" value="@Model.Apellido" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Correo">Correo</label>
+            <input type="email" name="Correo" class="form-control" id="Correo" value="@Model.Correo" required />
+        </div>
+
+        <div class="form-group">
+            <label for="IdDepartamento">Departamento</label>
+            <select name="IdDepartamento" class="form-control" id="IdDepartamento" required>
+                @foreach (var departamento in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
+                {
+                    <option value="@departamento.Id" @(Model.IdDepartamento == departamento.Id ? "selected" : "")>@departamento.Nombre</option>
+                }
+            </select>
+        </div>
+    }
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 </form>
