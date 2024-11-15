@@ -1,0 +1,48 @@
+@model jbp_wapp.Models.Vacante
+@Html.Partial("Loading")
+<h1 class="text-center">Crear Nueva Vacante</h1>
+<div class="container-fluid p-3">
+<form asp-action="Create" method="post">
+    <div class="row mt-4">
+        <div class="mb-3 col">
+            <label class="form-label">Título</label>
+            <input class="form-control" asp-for="Titulo" />
+            <span asp-validation-for="Titulo"></span>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Descripción</label>
+            <input class="form-control" asp-for="Descripcion" />
+            <span asp-validation-for="Descripcion"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-3 col">
+            <label class="form-label">Experiencia Requerida</label>
+            <select name="IdExperiencia" class="form-select" required>
+                @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+                {
+                    <option value="@exp.Id">@exp.Descripcion</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3 col">
+            <label class="form-label">Profesión Requerida</label>
+            <select name="IdProfesion" class="form-select" required>
+                @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+                {
+                    <option value="@pf.Id">@pf.Nombre</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div>
+        <label class="form-label">Fecha de Cierre</label>
+        <input class="form-control" asp-for="FechaCierre" type="date" />
+        <span asp-validation-for="FechaCierre"></span>
+    </div>
+    <div class="btn-group mt-3 gap-2">
+        <button class="btn btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-secondary" onclick="history.back()">Cancelar</button>
+    </div>
+</form>
+</div>

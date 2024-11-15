@@ -1,6 +1,11 @@
 using jbp_wapp.Data;
 using jbp_wapp.Models;
 using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
+=======
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+>>>>>>> feature/ui
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +28,18 @@ builder.Services.AddCors(options =>
         });
 });
 
+<<<<<<< HEAD
+=======
+// Agrega el esquema de autenticación de cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Redirige a Login si el usuario no está autenticado
+        options.LogoutPath = "/Account/Logout"; // Ruta para cerrar sesión
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Ruta para acceso denegado, si la configuras
+    });
+
+>>>>>>> feature/ui
 // Configuraci�n de sesi�n
 builder.Services.AddSession(options =>
 {
@@ -54,6 +71,7 @@ app.UseSession();
 // Habilitar autenticaci�n y autorizaci�n
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,0 +1,35 @@
+@model IEnumerable<jbp_wapp.Models.Vacante>
+<h1 class="text-center">Mi lista de Vacantes</h1>
+<a asp-action="Create" asp-controller="Vacante" class="btn btn-success">Crear Nueva Vacante</a>
+<div class="table-responsive">
+    <table class="table-bordered table-hover table-sm my-5">
+        <thead class="text-center bg-light">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Reclutador</th>
+                <th>Fecha de Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vacante in Model)
+            {
+                <tr>
+                    <td>@vacante.Titulo</td>
+                    <td>@vacante.Descripcion</td>
+                    <td>@vacante.Usuario.Nombre @vacante.Usuario.Apellido</td>
+                    <td>@vacante.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <div class="btn-group gap-2">
+                            <a asp-controller="Vacante" asp-action="Details" asp-route-id="@vacante.Id" class="btn btn-outline-primary btn-sm">Detalles</a>
+                            <a class="btn btn-outline-primary btn-sm">Aplicantes</a>
+                            <a asp-controller="Vacante" asp-action="Delete" asp-route-id="@vacante.Id" class="btn btn-outline-danger btn-sm">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

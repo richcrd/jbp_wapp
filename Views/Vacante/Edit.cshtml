@@ -1,0 +1,21 @@
+@model jbp_wapp.Models.Vacante
+<h1>Editar Vacante</h1>
+<form asp-action="Edit" method="post">
+    <input asp-for="Id" type="hidden" />
+    <div>
+        <label>Título</label>
+        <input asp-for="Titulo" />
+        <span asp-validation-for="Titulo"></span>
+    </div>
+    <div>
+        <label>Descripción</label>
+        <input asp-for="Descripcion" />
+        <span asp-validation-for="Descripcion"></span>
+    </div>
+    <div>
+        <label>Fecha de Cierre</label>
+        <input asp-for="FechaCierre" type="date" />
+        <span asp-validation-for="FechaCierre"></span>
+    </div>
+    <button type="submit">Actualizar</button>
+</form>
