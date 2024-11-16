@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-﻿@{
-    ViewData["Title"] = "Inicio";
-}
-<h2>Bienvenido, @ViewData["UsuarioNombre"]</h2>
-<p>
-    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
-    <a asp-controller="Account" asp-action="Signup" class="btn btn-warning">Signup</a>
-    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
-</p>
-=======
-﻿@model IEnumerable<jbp_wapp.Models.Vacante>
+@model IEnumerable<jbp_wapp.Models.Vacante>
 @{
     ViewData["Title"] = "Inicio";
 }
@@ -50,4 +39,3 @@
 </div>
 @Html.Partial("SuccessProfiles")
 @Html.Partial("FutureSection")
->>>>>>> feature/ui

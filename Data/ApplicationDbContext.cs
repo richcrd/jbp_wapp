@@ -11,8 +11,6 @@ namespace jbp_wapp.Data
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
         public DbSet<Genero> Generos { get; set; }
-<<<<<<< HEAD
-=======
         public DbSet<Experiencia> Experiencias { get; set; }
         public DbSet<Profesion> Profesiones { get; set; }
         public DbSet<PerfilPostulante> PerfilPostulante { get; set; }
@@ -20,42 +18,27 @@ namespace jbp_wapp.Data
         public DbSet<Aplicacion> Aplicaciones { get; set; }
         public DbSet<EstadosAplicacion> EstadosAplicaciones { get; set; }
         public DbSet<HistorialEstadoAplicaciones> HistorialEstadosAplicaciones { get; set; }
->>>>>>> feature/ui
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             // Configuración de relaciones y restricciones adicionales si son necesarias
-<<<<<<< HEAD
-=======
             // Relacion Usuario - Genero 1-1
->>>>>>> feature/ui
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Genero)
                 .WithMany()
                 .HasForeignKey(u => u.IdGenero);
-<<<<<<< HEAD
-
-=======
             // Relacion Usuario - Rol 1-1
->>>>>>> feature/ui
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Rol)
                 .WithMany()
                 .HasForeignKey(u => u.IdRol);
-<<<<<<< HEAD
-
-=======
             // Relacion Usuario - Departamento 1-1
->>>>>>> feature/ui
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Departamento)
                 .WithMany()
                 .HasForeignKey(u => u.IdDepartamento);
-<<<<<<< HEAD
-        }
-=======
             // Relacion Usuario - Experiencia 1-1
             modelBuilder.Entity<PerfilPostulante>()
                 .HasOne(u => u.Experiencia)
@@ -128,6 +111,5 @@ namespace jbp_wapp.Data
                 .HasConstraintName("FK_HistorialEstadoAplicaciones_EstadoAplicacion")
                 .OnDelete(DeleteBehavior.Cascade);
                 }
->>>>>>> feature/ui
     }
 }
