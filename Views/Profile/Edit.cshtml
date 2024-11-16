@@ -1,4 +1,4 @@
-@model jbp_wapp.Models.PerfilPostulante
+@* @model jbp_wapp.Models.PerfilPostulante
 
 @{
     var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
@@ -11,32 +11,38 @@
 
     @if (userRole == "2")
     {
-        <div class="form-group">
-            <label for="IdProfesion">Profesión</label>
-            <select name="IdProfesion" class="form-control" id="IdProfesion" required>
-                @foreach (var profesion in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+         <div class="form-group">
+            <label for="IdProfesion">Profesion</label>
+            <select asp-for="IdProfesion" class="form-control">
+                @foreach (var prof in ViewBag.Profesiones as IEnumerable<Profesiones>)
                 {
-                    <option value="@profesion.Id" @(Model.IdProfesion == profesion.Id ? "selected" : "")>@profesion.Nombre</option>
+                    <option value="@prof.Id" selected="@(Model.IdProfesion == prof.Id)">
+                        @prof.Nombre
+                    </option>
                 }
             </select>
         </div>
 
         <div class="form-group">
             <label for="IdExperiencia">Experiencia</label>
-            <select name="IdExperiencia" class="form-control" id="IdExperiencia" required>
-                @foreach (var experiencia in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+            <select asp-for="IdExperiencia" class="form-control">
+                @foreach (var experiencia in ViewBag.Experiencias as IEnumerable<Experiencia>)
                 {
-                    <option value="@experiencia.Id" @(Model.IdExperiencia == experiencia.Id ? "selected" : "")>@experiencia.Descripcion</option>
+                    <option value="@experiencia.Id" selected="@(Model.IdExperiencia == experiencia.Id)">
+                        @experiencia.Descripcion
+                    </option>
                 }
             </select>
         </div>
 
         <div class="form-group">
             <label for="IdDepartamento">Departamento</label>
-            <select name="IdDepartamento" class="form-control" id="IdDepartamento" required>
-                @foreach (var departamento in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
+            <select asp-for="IdDepartamento" class="form-control">
+                @foreach (var dpto in ViewBag.Departamentos as IEnumerable<Departamento>)
                 {
-                    <option value="@departamento.Id" @(Model.Usuario.IdDepartamento == departamento.Id ? "selected" : "")>@departamento.Nombre</option>
+                    <option value="@dpto.Id" selected="@(Model.IdDepartamento == dpto.Id)">
+                        @dpto.Nombre
+                    </option>
                 }
             </select>
         </div>
@@ -65,14 +71,16 @@
 
         <div class="form-group">
             <label for="IdDepartamento">Departamento</label>
-            <select name="IdDepartamento" class="form-control" id="IdDepartamento" required>
-                @foreach (var departamento in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
+            <select asp-for="IdDepartamento" class="form-control">
+                @foreach (var dpto in ViewBag.Departamentos as IEnumerable<Departamento>)
                 {
-                    <option value="@departamento.Id" @(Model.IdDepartamento == departamento.Id ? "selected" : "")>@departamento.Nombre</option>
+                    <option value="@dpto.Id" selected="@(Model.IdDepartamento == dpto.Id)">
+                        @dpto.Nombre
+                    </option>
                 }
             </select>
         </div>
     }
 
     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-</form>
+</form> *@

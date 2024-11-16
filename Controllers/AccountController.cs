@@ -88,7 +88,9 @@ namespace jbp_wapp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string Correo, string Contrasena)
         {
-            var usuario = await _context.Usuarios
+            try
+            {
+                var usuario = await _context.Usuarios
                 .Where(u => u.Correo == Correo && u.Contrasena == Contrasena)
                 .Select(u => new {
                     u.Id,
@@ -123,6 +125,19 @@ namespace jbp_wapp.Controllers
 
             ViewBag.ErrorMessage = "Correo o contraseña incorrectos.";
             return View();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Error SQL: {ex.Message}");
+                ViewData["ErrorMessage"] = "No se pudo conectar con la base de datos";
+                return View("DatabaseError");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error general: {ex.Message}");
+                ViewData["ErrorMessage"] = "Ocurrió un error inesperado. Intente más tarde.";
+                return View("GeneralError");
+            }
         }
 
         [Authorize]

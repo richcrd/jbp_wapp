@@ -30,7 +30,7 @@ else
     <div>
         <h4>Nombre: @Model.Nombre @Model.Apellido</h4>
         <p>Correo: @Model.Correo</p>
-        <p>Departamento: @Model.Departamento.Nombre</p>
+        <p>Departamento: @Model.Usuario?.Departamento?.Nombre</p>
         
         <a href="@Url.Action("Edit", "Profile")" class="btn btn-primary">Editar Información</a>
     </div>
