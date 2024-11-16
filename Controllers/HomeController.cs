@@ -5,13 +5,10 @@ using jbp_wapp.Data;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-<<<<<<< HEAD
-=======
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
->>>>>>> feature/ui
 
 namespace jbp_wapp.Controllers
 {
@@ -25,23 +22,6 @@ namespace jbp_wapp.Controllers
         }
 
         // Acción para la pantalla principal (Index)
-<<<<<<< HEAD
-        public IActionResult Index()
-        {
-            var userId = HttpContext.Session.GetInt32("UsuarioId");
-            Console.WriteLine($"Usuario ID en sesión: {userId}");
-
-            // Verifica si el usuario está autenticado
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Account"); // Redirige a la pantalla de inicio de sesión si no está autenticado
-            }
-            // Obtener el nombre del usuario de la sesión
-            var usuarioNombre = HttpContext.Session.GetString("UsuarioNombre");
-            ViewData["UsuarioNombre"] = usuarioNombre;
-            return View();
-        }
-=======
         public async Task<IActionResult> Index()
         {
             // Verifica si el usuario está autenticado
@@ -62,7 +42,6 @@ namespace jbp_wapp.Controllers
             ViewBag.VacantesRecomendadas = await _context.Vacantes
                 .Where(v => v.IdExperiencia == 1)
                 .ToListAsync();
->>>>>>> feature/ui
 
             return View();
         }

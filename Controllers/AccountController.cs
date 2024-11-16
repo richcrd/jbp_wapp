@@ -12,50 +12,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-<<<<<<< HEAD
-=======
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
->>>>>>> feature/ui
 
 namespace jbp_wapp.Controllers
 {
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
-<<<<<<< HEAD
 
         public AccountController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Signup()
-        {
-            await CargarDatos();
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Login()
-=======
-
-        public AccountController(ApplicationDbContext context)
->>>>>>> feature/ui
-        {
-            _context = context;
-        }
-
-<<<<<<< HEAD
-        [HttpPost]
-        public async Task<IActionResult> Signup(Usuario usuario)
-        {
-            if (usuario == null)
-            {
-=======
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Signup()
@@ -86,7 +58,6 @@ namespace jbp_wapp.Controllers
         {
             if (usuario == null)
             {
->>>>>>> feature/ui
                 await CargarDatos();
                 ViewBag.ErrorMessage = "Los datos del usuario son nulos";
                 return View();
@@ -128,11 +99,6 @@ namespace jbp_wapp.Controllers
             
             if (usuario != null)
             {
-<<<<<<< HEAD
-                Console.WriteLine($"Estableciendo UsuarioId en sesión: {usuario.Id}");
-                HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
-                HttpContext.Session.SetString("UsuarioNombre", usuario.NombreUsuario);
-=======
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
@@ -151,7 +117,6 @@ namespace jbp_wapp.Controllers
 
                 // Autenticar el usuario
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
->>>>>>> feature/ui
 
                 return RedirectToAction("Index", "Home");
             }
@@ -160,27 +125,16 @@ namespace jbp_wapp.Controllers
             return View();
         }
 
-<<<<<<< HEAD
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-=======
         [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
->>>>>>> feature/ui
             return RedirectToAction("Login", "Account");
         }
 
         // Cache de datos para evitar consultas repetitivas
         public async Task CargarDatos()
         {
-<<<<<<< HEAD
-            ViewBag.Roles = await _context.Roles.ToListAsync();
-            ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
-            ViewBag.Generos = await _context.Generos.ToListAsync();
-=======
             ViewBag.Roles = await _context.Roles
             .Where(r => r.Nombre != "admin")
             .ToListAsync();
@@ -192,7 +146,6 @@ namespace jbp_wapp.Controllers
         public async Task<IActionResult> AccessDenied()
         {
             return View();
->>>>>>> feature/ui
         }
     }
 }
