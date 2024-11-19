@@ -1,12 +1,46 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using jbp_wapp.Models;
+using Microsoft.Extensions.Logging;
 
 namespace jbp_wapp.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        private readonly ILogger<ApplicationDbContext> _logger;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ILogger<ApplicationDbContext> logger) : base(options) 
+        { 
+            _logger = logger;
 
+            try 
+            {
+                if (Database.CanConnect())
+                {
+                    _logger.LogInformation("Conexion exitosa a la base de datos");
+                }
+                else 
+                {
+                    _logger.LogInformation("No se pudo establecer la conexion a la BD");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al intentar conectar a la base de datos");
+            }
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            });
+
+            optionsBuilder
+                .UseLoggerFactory(loggerFactory)
+                .EnableSensitiveDataLogging();
+
+            base.OnConfiguring(optionsBuilder);
+        }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Rol> Roles { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
@@ -91,7 +125,7 @@ namespace jbp_wapp.Data
             // Relación Aplicación - Vacantes N-1
             modelBuilder.Entity<Aplicacion>()
                 .HasOne(a => a.Vacante)
-                .WithMany()
+                .WithMany(v => v.Aplicaciones)
                 .HasForeignKey(a => a.IdVacante)
                 .HasConstraintName("FK_Aplicacion_Vacante")
                 .OnDelete(DeleteBehavior.Cascade);

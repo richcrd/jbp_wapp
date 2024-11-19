@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración del logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // Registra los logs en la consola
+builder.Logging.AddDebug();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

@@ -1,0 +1,142 @@
+CREATE DATABASE BD_PTEST
+GO
+
+USE BD_PTEST
+GO
+
+CREATE TABLE Departamentos
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	Nombre VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE Generos
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	Nombre VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE Roles
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	Nombre VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE EstadosAplicacion
+(
+    Id INT PRIMARY KEY IDENTITY (1,1),
+    Nombre VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE Profesiones
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	Nombre VARCHAR(50) NOT NULL,
+);
+
+CREATE TABLE Experiencias
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	Descripcion VARCHAR(50) NOT NULL,
+);
+
+CREATE INDEX IDX_Usuarios_Correo ON Usuarios (Correo);
+
+CREATE TABLE Usuarios
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	IdGenero INT FOREIGN KEY REFERENCES Generos (Id),
+	IdRol INT FOREIGN KEY REFERENCES Roles (Id),
+	IdDepartamento INT FOREIGN KEY REFERENCES Departamentos (Id),
+	Nombre VARCHAR(100) NOT NULL,
+	Apellido VARCHAR(100) NOT NULL,
+	NombreUsuario VARCHAR(100) NOT NULL,
+	Correo VARCHAR(100) NOT NULL,
+	Contrasena VARCHAR(100) NOT NULL,
+);
+
+CREATE TABLE PerfilPostulante
+(
+	Id INT PRIMARY KEY IDENTITY (1,1),
+	IdUsuario INT REFERENCES Usuarios (Id),
+	IdProfesion INT REFERENCES Profesiones (Id),
+	IdExperiencia INT REFERENCES Experiencias (Id),
+	CV VARBINARY(MAX) NOT NULL,
+);
+
+CREATE TABLE Vacantes
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    IdUsuario INT REFERENCES Usuarios (Id), -- si tiene rol reclutador puede crear vacantes
+	IdProfesion INT REFERENCES Profesiones (Id),
+	IdExperiencia INT REFERENCES Experiencias (Id),
+    Titulo VARCHAR(100) NOT NULL,
+    Descripcion VARCHAR(255) NOT NULL,
+	FechaCreacion DATETIME NOT NULL,
+    FechaCierre DATETIME NULL,
+);
+/*Agregar columna relacion dpto */
+
+CREATE TABLE Aplicaciones
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    IdPostulante INT REFERENCES PerfilPostulante (Id), 
+    IdVacante INT REFERENCES Vacantes (Id),
+    FechaAplicacion DATETIME NOT NULL
+);
+
+CREATE TABLE HistorialEstadoAplicaciones
+(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    IdAplicacion INT REFERENCES Aplicaciones (Id),
+    IdEstadoAplicacion INT REFERENCES EstadosAplicacion (Id),
+    FechaModificacion DATETIME NOT NULL
+);
+
+SELECT * FROM Experiencias;
+SELECT * FROM Usuarios;
+SELECT * FROM Roles;
+SELECT * FROM Vacantes;
+EXEC sp_rename 'Usuarios.Usuario', 'NombreUsuario', 'COLUMN';
+
+INSERT INTO Usuarios VALUES
+(1, 1, 1, 'admin', 'role','admin123', 'admin@test.com' ,'123');
+INSERT INTO Departamentos VALUES
+('Managua'),
+('León'),
+('Estelí'),
+('Chinandega'),
+('Jinotega'),
+('Matagalpa'),
+('Madriz'),
+('Nueva Segovia'),
+('Boaco'),
+('Chontales'),
+('Carazo'),
+('Rio San Juan'),
+('Rivas'),
+('Masaya'),
+('Granada');
+INSERT INTO Generos VALUES
+('Masculino'),
+('Femenino');
+INSERT INTO Roles VALUES
+('Admin'),
+('Postulante'),
+('Reclutador');
+INSERT INTO Experiencias VALUES
+('Sin experiencia'),
+('1 año de experiencia'),
+('2 años de experiencia'),
+('3 años de experiencia'),
+('5 o más años de experiencia');
+INSERT INTO EstadosAplicacion VALUES
+('Pendiente'),
+('Aceptada'),
+('Rechazada');
+INSERT INTO Profesiones VALUES
+('Ing. Sistemas'),
+('Ing. Civil'),
+('Lic. Derecho'),
+('Ing. Computacion'),
+('N/A');

@@ -1,25 +1,14 @@
-using jbp_wapp.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.Security.Cryptography;
-using System.Text;
-using System.Linq;
 using jbp_wapp.Data;
-using System.Data.SqlClient;
-using System.Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using jbp_wapp.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 
 namespace jbp_wapp.Controllers
 {
-    
+
     public class VacanteController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -82,23 +71,50 @@ namespace jbp_wapp.Controllers
         {
             await CargarDatos();
 
+            if(vacante.Aplicaciones == null)
+            {
+                vacante.Aplicaciones = new List<Aplicacion>();
+            }
+
             if (ModelState.IsValid)
             {
-                await CargarDatos();
-                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-                if(userIdClaim != null)
+                try
                 {
-                    vacante.IdUsuario = int.Parse(userIdClaim.Value);
+                    await CargarDatos();
+                    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                    if (userIdClaim != null)
+                    {
+                        vacante.IdUsuario = int.Parse(userIdClaim.Value);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Nose pudo obtener el Id del usuario");
+                        return View(vacante);
+                    }
+
+                    var vacantesExistente_Reclutador = await _context.Vacantes
+                        .Where(v => v.IdUsuario == vacante.IdUsuario)
+                        .CountAsync();
+
+                    if (vacantesExistente_Reclutador >= 2)
+                    {
+
+                        ViewBag.ErrorMessage = "Haz alcanzado el limite de vacantes. No puedes crear mas de 2 vacantes";
+                        return View(vacante);
+                    }
+
+                    vacante.FechaCreacion = DateTime.Now;
+                    _context.Add(vacante);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Vacante");
                 }
-                else 
+                catch (Exception ex) 
                 {
-                    ModelState.AddModelError("", "Nose pudo obtener el Id del usuario");
+                    ViewBag.ErrorMessage = "Error en el modelo";
+                    Console.WriteLine("Error", ex);
                     return View(vacante);
                 }
-                vacante.FechaCreacion = DateTime.Now;
-                _context.Add(vacante);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Vacante");
+                
             }
             return View(vacante);
         }
@@ -178,7 +194,10 @@ namespace jbp_wapp.Controllers
         [Authorize(Roles = "3")]
         public async Task<IActionResult> Delete(int id)
         {
-            var vacante = await _context.Vacantes.FindAsync(id);
+            var vacante = await _context.Vacantes
+                .Include(v => v.Usuario)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (vacante == null)
             {
                 return NotFound();
@@ -192,7 +211,18 @@ namespace jbp_wapp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vacante = await _context.Vacantes.FindAsync(id);
+            var vacante = await _context.Vacantes
+                .Include(v => v.Aplicaciones)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (vacante == null)
+            {
+                return NotFound();
+            }
+            // Opcional: Eliminar las aplicaciones asociadas a la vacante antes de eliminar la vacante
+            if (vacante.Aplicaciones != null && vacante.Aplicaciones.Any())
+            {
+                _context.Aplicaciones.RemoveRange(vacante.Aplicaciones);
+            }
             _context.Vacantes.Remove(vacante);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Vacante");

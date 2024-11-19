@@ -27,5 +27,6 @@ namespace jbp_wapp.Models
         public virtual Usuario? Usuario { get; set; }
         public virtual Profesion? Profesion { get; set; }
         public virtual Experiencia? Experiencia { get; set; }
+        public virtual ICollection<Aplicacion> Aplicaciones { get; set; } = new List<Aplicacion>();
     }
 }
