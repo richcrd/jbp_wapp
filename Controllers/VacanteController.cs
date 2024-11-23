@@ -41,7 +41,7 @@ namespace jbp_wapp.Controllers
 
             return View(vacantes);
         }
-        [Authorize(Roles = "1")]
+        [Authorize(Roles = "1,2")]
         [HttpGet] // Autoriza a cualquier usuario pero que este autenticado
         public async Task<IActionResult> All()
         {
@@ -123,70 +123,6 @@ namespace jbp_wapp.Controllers
         {
             ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
             ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
-        }
-
-        // GET: Vacante/Details/{id} - Muestra los detalles de una vacante
-        [HttpGet]
-        [Authorize(Roles = "3")]
-        public async Task<IActionResult> Details(int id)
-        {
-            var vacante = await _context.Vacantes
-                .Include(v => v.Usuario)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (vacante == null)
-            {
-                return NotFound();
-            }
-
-            return View(vacante);
-        }
-
-         // Acción para mostrar el formulario de edición
-        [HttpGet]
-        [Authorize(Roles = "3")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var vacante = await _context.Vacantes.FindAsync(id);
-            if (vacante == null)
-            {
-                return NotFound();
-            }
-            return View(vacante);
-        }
-
-        // Acción para procesar el formulario de edición
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "3")]
-        public async Task<IActionResult> Edit(int id, Vacante vacante)
-        {
-            if (id != vacante.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(vacante);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VacanteExists(vacante.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(vacante);
         }
 
         // Acción para eliminar una vacante
