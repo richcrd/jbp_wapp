@@ -3,52 +3,50 @@
 }
 @model jbp_wapp.Models.Usuario
 @Html.Partial("Loading")
-<section class="h-100 h-custom">
+<section class="h-100 d-flex align-items-center justify-content-center">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-8 col-xl-6">
-                <div class="card rounded-3">
-                    @* <img src=""
-                         class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
-                         alt="Sample photo"> *@
+                <div class="card border-dark rounded-3 shadow-sm bg-light text-dark">
                     <div class="card-body p-4 p-md-5">
-                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registrar Cuenta</h3>
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 text-center">Registrar Cuenta</h3>
+                        
                         @if (ViewBag.ErrorMessage != null)
                         {
                             <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
                         }
+
                         <form id="registerForm" class="px-md-2" asp-action="Signup" method="post">
-                            <div class="row">
-                                <div class="col-md-6 mb-2">
-                                    <div class="form-outline mb-4">
-                                <div class="col mb-2">
-                                    <div class="form-outline">
-                                        <label class="form-label">Nombre</label>
-                                        <input name="Nombre" class="form-control" type="text" id="Nombre" required />
-                                    </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="Nombre">Nombre</label>
+                                    <input name="Nombre" class="form-control" type="text" id="Nombre" required />
                                 </div>
-                                <div class="col mb-2">
-                                    <label>Apellido</label>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="Apellido">Apellido</label>
                                     <input name="Apellido" class="form-control" type="text" id="Apellido" required />
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col mb-2">
-                                    <label class="form-label">Nombre Usuario</label>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="NombreUsuario">Nombre Usuario</label>
                                     <input name="NombreUsuario" class="form-control" type="text" id="NombreUsuario" required />
                                 </div>
-                                <div class="col mb-2">
-                                    <label class="form-label">Correo</label>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="Correo">Correo</label>
                                     <input name="Correo" class="form-control" type="email" id="Correo" required />
                                 </div>
                             </div>
-                            <div class="form-outline mb-2">
-                                <label class="form-label">Contrasena</label>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="Contrasena">Contraseña</label>
                                 <input name="Contrasena" class="form-control" type="password" id="Contrasena" required />
                             </div>
-                            <div class="row">
-                                <div class="col mb-2">
-                                    <label class ="form-label">Rol</label>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="Rol">Rol</label>
                                     <select name="IdRol" class="form-control" id="Rol" required>
                                         @foreach (var rol in ViewBag.Roles as List<jbp_wapp.Models.Rol> ?? new List<jbp_wapp.Models.Rol>())
                                         {
@@ -56,8 +54,8 @@
                                         }
                                     </select>
                                 </div>
-                                <div class="col mb-2">
-                                    <label class="form-label">Departamento</label>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="Departamento">Departamento</label>
                                     <select name="IdDepartamento" class="form-control" id="Departamento" required>
                                         @foreach (var dpto in ViewBag.Departamentos as List<jbp_wapp.Models.Departamento> ?? new List<jbp_wapp.Models.Departamento>())
                                         {
@@ -66,21 +64,26 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="mb-2">
-                                    <label class="form-label">Selecciona tu Genero</label>
-                                    <select name="IdGenero" class="form-control" id="Genero" required>
-                                        @foreach (var genr in ViewBag.Generos as List<jbp_wapp.Models.Genero> ?? new List<jbp_wapp.Models.Genero>())
-                                        {
-                                            <option value="@genr.Id">@genr.Nombre</option>
-                                        }
-                                    </select>
-                                </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="Genero">Selecciona tu Género</label>
+                                <select name="IdGenero" class="form-control" id="Genero" required>
+                                    @foreach (var genr in ViewBag.Generos as List<jbp_wapp.Models.Genero> ?? new List<jbp_wapp.Models.Genero>())
+                                    {
+                                        <option value="@genr.Id">@genr.Nombre</option>
+                                    }
+                                </select>
                             </div>
-                            <button type="submit" id="registerButton" class="btn btn-primary btn-block">Registrar</button>
+
+                            <div class="text-center">
+                                <button type="submit" id="registerButton" class="btn btn-primary btn-block">Registrar</button>
+                            </div>
+
                             <div class="text-center mt-3">
-                                <a asp-controller="Account" asp-action="Login">Ya tienes cuenta?</a>
+                                <a asp-controller="Account" asp-action="Login">¿Ya tienes cuenta?</a>
                             </div>
                         </form>
+                    </div>
                 </div>
             </div>
         </div>
