@@ -92,17 +92,23 @@ namespace jbp_wapp.Controllers
         {
             var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
-            if (userRole != "Postulante")
+            if (userRole != "2")
             {
                 return Forbid("Solo los postulantes pueden crear un perfil.");
             }
-
-            if (!ModelState.IsValid)
+            try
             {
-                ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
-                ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
-                ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
-                return View(pfp);
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
+                    ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
+                    ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
+                    return View(pfp);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error",ex.ToString());
             }
 
             if (cvFile != null && cvFile.Length > 0)

@@ -8,7 +8,10 @@
 
 <form method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
     <div class="form-group">
         <label for="IdProfesion">Profesión</label>
         <select name="IdProfesion" class="form-control" id="IdProfesion" required>

@@ -63,14 +63,30 @@ namespace jbp_wapp.Controllers
                 return View();
             }
 
-            // poner limite de registro
-            var usuarioExistente = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario || u.Correo == usuario.Correo);
+            var usuarioExistenteCorreo = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo == usuario.Correo);
 
-            if (usuarioExistente != null)
+            var usuarioExistenteNombreUsuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.NombreUsuario == usuario.NombreUsuario);
+            
+            if (usuarioExistenteCorreo != null)
             {
                 await CargarDatos();
-                ViewBag.ErrorMessage = "El correo o usuario ya ha sido tomado";
+                ViewBag.ErrorMessage = "El correo ya está registrado.";
+                return View(usuario);
+            }
+
+            if (usuarioExistenteNombreUsuario != null)
+            {
+                await CargarDatos();
+                ViewBag.ErrorMessage = "El nombre de usuario ya está en uso.";
+                return View(usuario);
+            }
+
+            if (usuario.Contrasena.Length < 8)
+            {
+                await CargarDatos();
+                ViewBag.ErrorMessage = "La contraseña debe tener al menos 8 caracteres.";
                 return View();
             }
 
