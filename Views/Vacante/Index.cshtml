@@ -1,34 +1,61 @@
 @model IEnumerable<jbp_wapp.Models.Vacante>
-<h1 class="text-center">Mi lista de Vacantes</h1>
-<a asp-action="Create" asp-controller="Vacante" class="btn btn-success">Crear Nueva Vacante</a>
+
+<h1 class="text-center my-4">Mi Lista de Vacantes</h1>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <p class="text-muted">Gestiona tus vacantes de forma rápida y sencilla.</p>
+    <a asp-action="Create" asp-controller="Vacante" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Crear Nueva Vacante
+    </a>
+</div>
+
 <div class="table-responsive">
-    <table class="table-bordered table-hover table-sm my-5">
-        <thead class="text-center bg-light">
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-light text-center">
             <tr>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Reclutador</th>
-                <th>Fecha de Creación</th>
-                <th>Acciones</th>
+                <th style="width: 20%;">Título</th>
+                <th style="width: 35%;">Descripción</th>
+                <th style="width: 20%;">Reclutador</th>
+                <th style="width: 15%;">Fecha de Creación</th>
+                <th style="width: 10%;">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var vacante in Model)
+            @if (Model.Any())
+            {
+                @foreach (var vacante in Model)
+                {
+                    <tr>
+                        <td class="text-truncate" title="@vacante.Titulo">@vacante.Titulo</td>
+                        <td class="text-truncate" style="max-width: 300px;" title="@vacante.Descripcion">
+                            @Html.Raw(vacante.Descripcion.Length > 100 
+                                ? vacante.Descripcion.Substring(0, 100) + "..." 
+                                : vacante.Descripcion)
+                        </td>
+                        <td>@vacante.Usuario.Nombre @vacante.Usuario.Apellido</td>
+                        <td>@vacante.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-primary btn-sm" title="Ver aplicantes">
+                                    <i class="bi bi-people"></i> Aplicantes
+                                </a>
+                                <a asp-controller="Vacante" asp-action="Delete" asp-route-id="@vacante.Id" 
+                                   class="btn btn-outline-danger btn-sm" title="Eliminar">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@vacante.Titulo</td>
-                    <td>@vacante.Descripcion</td>
-                    <td>@vacante.Usuario.Nombre @vacante.Usuario.Apellido</td>
-                    <td>@vacante.FechaCreacion.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        <div class="btn-group gap-2">
-                            <a class="btn btn-outline-primary btn-sm">Aplicantes</a>
-                            <a asp-controller="Vacante" asp-action="Delete" asp-route-id="@vacante.Id" class="btn btn-outline-danger btn-sm">Eliminar</a>
-                        </div>
+                    <td colspan="5" class="text-center text-muted py-3">
+                        No hay vacantes disponibles.
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-

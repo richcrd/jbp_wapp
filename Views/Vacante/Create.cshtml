@@ -1,55 +1,77 @@
 @model jbp_wapp.Models.Vacante
+
 @Html.Partial("Loading")
-<h1 class="text-center">Crear Nueva Vacante</h1>
-<div class="container-fluid p-3">
+<h1 class="text-center my-4">Crear Nueva Vacante</h1>
+
+<div class="container py-4">
     @if (ViewBag.ErrorMessage != null)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @ViewBag.ErrorMessage
+            <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ErrorMessage
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
-    <form asp-action="Create" method="post">
-    <div class="row mt-4">
-        <div class="mb-3 col">
-            <label class="form-label">Título</label>
-            <input class="form-control" asp-for="Titulo" />
-            <span asp-validation-for="Titulo"></span>
+
+    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+        <div class="row g-3">
+            <!-- Título -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Título</label>
+                <input class="form-control" asp-for="Titulo" placeholder="Ejemplo: Desarrollador Full-Stack" />
+                <span class="text-danger" asp-validation-for="Titulo"></span>
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Descripción</label>
+                <textarea class="form-control" asp-for="Descripcion" rows="3" placeholder="Breve descripción de la vacante"></textarea>
+                <span class="text-danger" asp-validation-for="Descripcion"></span>
+            </div>
         </div>
-        <div class="mb-3 col">
-            <label class="form-label">Descripción</label>
-            <input class="form-control" asp-for="Descripcion" />
-            <span asp-validation-for="Descripcion"></span>
+
+        <div class="row g-3 mt-3">
+            <!-- Experiencia Requerida -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Experiencia Requerida</label>
+                <select name="IdExperiencia" class="form-select" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
+                    {
+                        <option value="@exp.Id">@exp.Descripcion</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Profesión Requerida -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Profesión Requerida</label>
+                <select name="IdProfesion" class="form-select" required>
+                    <option value="" disabled selected>Seleccione una profesión</option>
+                    @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
+                    {
+                        <option value="@pf.Id">@pf.Nombre</option>
+                    }
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="mb-3 col">
-            <label class="form-label">Experiencia Requerida</label>
-            <select name="IdExperiencia" class="form-select" required>
-                @foreach (var exp in ViewBag.Experiencias as List<jbp_wapp.Models.Experiencia> ?? new List<jbp_wapp.Models.Experiencia>())
-                {
-                    <option value="@exp.Id">@exp.Descripcion</option>
-                }
-            </select>
+
+        <div class="row mt-3">
+            <!-- Fecha de Cierre -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Fecha de Cierre</label>
+                <input class="form-control" asp-for="FechaCierre" type="date" required />
+                <span class="text-danger" asp-validation-for="FechaCierre"></span>
+            </div>
         </div>
-        <div class="mb-3 col">
-            <label class="form-label">Profesión Requerida</label>
-            <select name="IdProfesion" class="form-select" required>
-                @foreach (var pf in ViewBag.Profesiones as List<jbp_wapp.Models.Profesion> ?? new List<jbp_wapp.Models.Profesion>())
-                {
-                    <option value="@pf.Id">@pf.Nombre</option>
-                }
-            </select>
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-start align-items-center gap-3 mt-4">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-check-circle-fill"></i> Guardar
+            </button>
+            <a class="btn btn-outline-secondary" asp-controller="Vacante" asp-action="Index">
+                <i class="bi bi-arrow-left-circle"></i> Volver
+            </a>
         </div>
-    </div>
-    <div>
-        <label class="form-label">Fecha de Cierre</label>
-        <input class="form-control" asp-for="FechaCierre" type="date" />
-        <span asp-validation-for="FechaCierre"></span>
-    </div>
-    <div class="btn-group mt-3 gap-2">
-        <button class="btn btn-primary" type="submit">Guardar</button>
-            <a class="btn btn-outline-secondary" asp-controller="Vacante" asp-action="Index">Volver</a>
-    </div>
-</form>
+    </form>
 </div>
