@@ -1,36 +1,16 @@
 @model jbp_wapp.Models.PerfilPostulante
 
-@{
-    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-}
-@if (userRole == "2")
-{
-    <h2>Mi Perfil de Postulante</h2>
-    <div>
-        <h4>Nombre: @(Model.Usuario?.Nombre ?? "N/A") @(Model.Usuario?.Apellido ?? "N/A")</h4>
-        <p>Profesión: @(Model.Profesion?.Nombre ?? "No disponible")</p>
-        <p>Experiencia: @(Model.Experiencia?.Descripcion ?? "No disponible")</p>
-        <p>Correo: @(Model.Usuario?.Correo ?? "No disponible")</p>
-        <p>Departamento: @(Model.Usuario?.Departamento?.Nombre ?? "No disponible")</p>
-
-        <!-- Mostrar CV si existe -->
-        @if (Model.CV != null)
-        {
-            <p><a href="@Url.Action("DownloadCV", "Profile", new { id = Model.Id })">Descargar CV</a></p>
-        }
-
-        <a href="@Url.Action("Edit", "Profile")" class="btn btn-primary">Editar Perfil</a>
-    </div>
-}
-else
-{
-    <!-- Si el rol no es Postulante (Admin o Reclutador) -->
-    <h2>Mi Información Básica</h2>
-    <div>
-        <h4>Nombre: @(Model.Usuario?.Nombre ?? "N/A") @(Model.Usuario?.Apellido ?? "N/A")</h4>
-        <p>Correo: @(Model.Usuario?.Correo ?? "No disponible")</p>
-        <p>Departamento: @(Model.Usuario?.Departamento?.Nombre ?? "No disponible")</p>
-
-        <a href="@Url.Action("Edit", "Profile")" class="btn btn-primary">Editar Información</a>
-    </div>
-}
+<h2>Mi Perfil de Postulante</h2>
+<div>
+    <h4>Nombre: @(Model.Usuario?.Nombre ?? "N/A") @(Model.Usuario?.Apellido ?? "N/A")</h4>
+    <p>Profesión: @(Model.Profesion?.Nombre ?? "No disponible")</p>
+    <p>Experiencia: @(Model.Experiencia?.Descripcion ?? "No disponible")</p>
+    <p>Correo: @(Model.Usuario?.Correo ?? "No disponible")</p>
+    <p>Departamento: @(Model.Usuario?.Departamento?.Nombre ?? "No disponible")</p>
+    <!-- Mostrar CV si existe -->
+    @if (Model.CV != null)
+    {
+        <p><a href="@Url.Action("DownloadCV", "Profile", new { id = Model.Id })">Descargar CV</a></p>
+    }
+    <a href="@Url.Action("EditPostulante", "Profile")" class="btn btn-primary">Editar Perfil</a>
+</div>

@@ -1,0 +1,9 @@
+@model jbp_wapp.Models.Usuario
+
+<h2>Mi Información Básica</h2>
+<div>
+    <h4>Nombre: @(Model.Nombre ?? "N/A") @(Model.Apellido ?? "N/A")</h4>
+    <p>Correo: @(Model.Correo ?? "No disponible")</p>
+    <p>Departamento: @(Model.Departamento?.Nombre ?? "No disponible")</p>
+    <a href="@Url.Action("EditUsuario", "Profile")" class="btn btn-primary">Editar Información</a>
+</div>
