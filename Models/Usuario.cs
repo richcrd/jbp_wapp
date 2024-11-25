@@ -35,5 +35,6 @@ namespace jbp_wapp.Models
         public virtual Genero? Genero { get; set; }
         public virtual Rol? Rol { get; set; }
         public virtual Departamento? Departamento { get; set; }
+        public virtual PerfilPostulante? PerfilPostulante { get; set; }
     }
 }

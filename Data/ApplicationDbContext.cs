@@ -86,18 +86,12 @@ namespace jbp_wapp.Data
             // Relacion PerfilPostulante - Usuario 1-1 (solo si rol es "Postulante")
             modelBuilder.Entity<PerfilPostulante>()
                 .HasOne(p => p.Usuario)
-                .WithOne()
+                .WithOne(u => u.PerfilPostulante)
                 .HasForeignKey<PerfilPostulante>(p => p.IdUsuario)
                 .HasConstraintName("FK_PerfilPostulante_Usuario_Postulante");
-                //.OnDelete(DeleteBehavior.Cascade)
 
-            // Restricción para que un PerfilPostulante solo exista si el Usuario tiene rol de Postulante
-            modelBuilder.Entity<PerfilPostulante>()
-                .HasOne(p => p.Usuario)
-                .WithOne()
-                .HasForeignKey<PerfilPostulante>(p => p.IdUsuario)
-                .IsRequired();
-            
+            //.OnDelete(DeleteBehavior.Cascade)
+
             // Relación Usuario - Vacantes 1-N (solo si el Usuario tiene rol de "Reclutador")
             modelBuilder.Entity<Vacante>()
                 .HasOne(v => v.Usuario)
@@ -144,6 +138,6 @@ namespace jbp_wapp.Data
                 .HasForeignKey(h => h.IdEstadoAplicacion)
                 .HasConstraintName("FK_HistorialEstadoAplicaciones_EstadoAplicacion")
                 .OnDelete(DeleteBehavior.Cascade);
-                }
+        }
     }
 }

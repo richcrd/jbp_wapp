@@ -32,41 +32,54 @@ namespace jbp_wapp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-          var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
-          var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-          if (userRole == "2")
-          {
-            // Cargar perfil de postulante
-            var postulante = await _context.PerfilPostulante
-            .Include(p => p.Profesion)
-            .Include(p => p.Experiencia)
-            .Include(p => p.Usuario)
-            .FirstOrDefaultAsync(p => p.IdUsuario == userId);
-
-            if(postulante == null)
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
             {
-              return RedirectToAction(nameof(Create));
+                return Unauthorized("No se pudo identificar al usuario.");
             }
-            return View("PostulanteIndex", postulante);
-            
-          }
-          else
-          {
-            // Para Admin y Reclutador, cargar solo información básica del usuario
-                var usuario = await _context.Usuarios.FindAsync(userId);
-                if (usuario == null)
-                {
-                    return NotFound("Usuario no encontrado.");
-                }
+            var userId = int.Parse(userIdClaim);
 
-                return View("UsuarioIndex", usuario);
-          }
+            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+            if (userRole == "2")
+            {
+                  // Cargar perfil de postulante
+                  var postulante = await _context.PerfilPostulante
+                      .Include(p => p.Profesion)
+                      .Include(p => p.Experiencia)
+                      .Include(p => p.Usuario)
+                      .ThenInclude(u => u.Departamento)
+                      .FirstOrDefaultAsync(p => p.IdUsuario == userId);
+
+              if (postulante == null)
+              {
+                return RedirectToAction(nameof(Create));
+              }
+
+              return View(postulante);
+              
+            }
+            else
+            {
+              // Para Admin y Reclutador, cargar solo información básica del usuario
+                  var usuario = await _context.Usuarios.FindAsync(userId);
+                  if (usuario == null)
+                  {
+                      return NotFound("Usuario no encontrado.");
+                  }
+
+                  return View("Index", usuario);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("No se pudo identificar al usuario.");
+            }
+            var userId = int.Parse(userIdClaim);
             var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
             if (userRole != "2")
@@ -78,50 +91,61 @@ namespace jbp_wapp.Controllers
             ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
             ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
 
-            var perfilPostulante = new PerfilPostulante
-            {
-                IdUsuario = userId
-            };
-
-            return View(perfilPostulante);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PerfilPostulante pfp, IFormFile cvFile)
+        public async Task<IActionResult> Create(PerfilPostulante pfp, IFormFile cvfile)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("No se pudo identificar al usuario.");
+            }
+            var userId = int.Parse(userIdClaim);
             var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+            pfp.IdUsuario = userId;
 
             if (userRole != "2")
             {
                 return Forbid("Solo los postulantes pueden crear un perfil.");
             }
-            try
+           
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
-                    ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
-                    ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
-                    return View(pfp);
+                    Console.WriteLine(error.ErrorMessage);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error",ex.ToString());
+
+                ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
+                ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
+                ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
+                return View(pfp);
             }
 
-            if (cvFile != null && cvFile.Length > 0)
+            if (cvfile != null)
             {
-                using (var memoryStream = new System.IO.MemoryStream())
-                {
-                    await cvFile.CopyToAsync(memoryStream);
-                    pfp.CV = memoryStream.ToArray();
-                }
+                Console.WriteLine($"Archivo recibido: {cvfile.FileName}, tamaño: {cvfile.Length}");
+                using var ms = new MemoryStream();
+                await cvfile.CopyToAsync(ms);
+                pfp.CV = ms.ToArray();
+            }
+            else
+            {
+                Console.WriteLine("cvFile", "Debes subir un archivo de CV.");
+                ViewBag.Profesiones = await _context.Profesiones.ToListAsync();
+                ViewBag.Experiencias = await _context.Experiencias.ToListAsync();
+                ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
+                return View(pfp);
             }
 
             _context.PerfilPostulante.Add(pfp);
+            Console.WriteLine("Guardando perfil...");
             await _context.SaveChangesAsync();
+            Console.WriteLine("Perfil guardado con ID: " + pfp.Id);
 
             return RedirectToAction(nameof(Index));
         }
@@ -160,7 +184,7 @@ namespace jbp_wapp.Controllers
                 }
 
                 ViewBag.Departamentos = await _context.Departamentos.ToListAsync();
-                return View("UsuarioEdit", usuario);
+                return View("Edit", usuario);
             }
         }
 

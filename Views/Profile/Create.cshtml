@@ -6,7 +6,7 @@
 
 <h2>Crear Perfil de Postulante</h2>
 
-<form method="post" enctype="multipart/form-data">
+<form asp-action="Create" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
     @if (ViewBag.ErrorMessage != null)
     {
@@ -33,8 +33,8 @@
     </div>
 
     <div class="form-group">
-        <label for="CvFile">Subir CV (opcional)</label>
-        <input type="file" name="cvFile" class="form-control" id="CvFile" />
+        <label for="cvfile">Subir CV</label>
+        <input type="file" name="cvfile" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-primary">Crear Perfil</button>
