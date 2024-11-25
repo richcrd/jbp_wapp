@@ -1,0 +1,9 @@
+@model Vacante 
+
+<div>
+    <h5 class="text-info">@Model.Titulo</h5>
+    <p><strong>Descripción:</strong> @Model.Descripcion</p>
+    <p><strong>Profesión:</strong> @(Model.Profesion.Nombre ?? "No especificado")</p>
+    <p><strong>Experiencia:</strong> @(Model.Experiencia.Descripcion ?? "No especificada")</p>
+    <p><strong>Reclutador:</strong> @(Model.Usuario.Nombre ?? "No especificado")</p>
+</div>

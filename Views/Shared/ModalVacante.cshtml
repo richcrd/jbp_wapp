@@ -1,0 +1,31 @@
+<!-- Modal de Detalles de la Vacante -->
+<div class="modal fade" id="vacanteModal" tabindex="-1" aria-labelledby="vacanteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="vacanteModalLabel">Detalles de la Vacante</h5>
+                <button type="button" class="btn btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="vacanteModalBody">
+                <!-- Aquí se cargarán los detalles de la vacante -->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function openVacanteModal(id) {
+    // Hacer la solicitud AJAX al servidor
+    fetch(`/Vacante/Details?id=${id}`)
+        .then(response => response.text())  // Esperamos HTML de la Partial View
+        .then(html => {
+            // Colocar el HTML recibido en el modal
+            document.getElementById('vacanteModalBody').innerHTML = html;
+            // Mostrar el modal
+            var myModal = new bootstrap.Modal(document.getElementById('vacanteModal'));
+            myModal.show();
+        })
+        .catch(error => {
+            console.error('Error al cargar los detalles:', error);
+        });
+}
+</script>

@@ -168,5 +168,23 @@ namespace jbp_wapp.Controllers
         {
             return _context.Vacantes.Any(e => e.Id == id);
         }
+
+        [Authorize(Roles = "1,2,3")]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var vacante = await _context.Vacantes
+            .Include(v => v.Usuario)
+            .Include(v => v.Profesion)
+            .Include(v => v.Experiencia)
+            .FirstOrDefaultAsync(v => v.Id == id);
+            
+            if (vacante == null)
+            {
+                return NotFound("No se encontro la vacante con este id");
+            }
+
+            return PartialView("_VacanteDetails", vacante);
+        }
     }
 }
