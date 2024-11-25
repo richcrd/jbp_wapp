@@ -14,6 +14,7 @@ namespace jbp_wapp.Models
         [ForeignKey("IdExperiencia")]
         public int IdExperiencia { get; set; }
         public byte[]? CV { get; set; }
+        public string? CVFileName { get; set; }
 
         // Relaciones
         public virtual Usuario? Usuario { get; set; }

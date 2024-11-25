@@ -231,6 +231,10 @@ namespace jbp_wapp.Controllers
                 await cvfile.CopyToAsync(ms);
                 postulante.CV = ms.ToArray();
             }
+            else
+            {
+                Console.WriteLine("Debes subir un archivo de CV.");
+            }
 
             if (model.IdProfesion > 0)
                 postulante.IdProfesion = model.IdProfesion;
@@ -333,19 +337,30 @@ namespace jbp_wapp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DownloadCV(int id)
+        [HttpGet]
+        public async Task<IActionResult> DownloadCV(int id)
         {
-            var perfil = _context.PerfilPostulante.FirstOrDefaultAsync(p => p.Id == id);
+            var postulante = await _context.PerfilPostulante
+            .Include(p => p.Usuario)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (perfil == null || perfil.CV == null)
+            if (postulante == null)
             {
-                return NotFound("El cv no esta disponible");
+                // Si no se encuentra el postulante, devuelve un error adecuado.
+                return NotFound("El perfil no fue encontrado.");
             }
 
-            var fileName = $"CV_{perfil.Usuario?.Nombre ?? "Postulante"}_{perfil.Usuario?.Apellido ?? "Desconocido"}.pdf";
+            if (postulante.CV == null)
+            {
+                // Si el CV está vacío, también lo manejamos de forma adecuada.
+                return NotFound("El perfil no tiene un CV disponible.");
+            }
 
-            // Retornar el archivo como un contenido descargable
-            return File(perfil.CV, "application/pdf", fileName);
+            // Si CVFileName no es nulo, lo usamos como nombre del archivo
+            var cvFile = postulante.CV;
+            var fileName = "CV_" + postulante.Usuario.Nombre + ".pdf" ?? "CV_desconocido";
+
+            return File(cvFile, "application/pdf", fileName);
         }
     }
 }
