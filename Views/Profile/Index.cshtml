@@ -1,16 +1,37 @@
 @model jbp_wapp.Models.PerfilPostulante
-
-<h2>Mi Perfil de Postulante</h2>
-<div>
-    <h4>Nombre: @(Model.Usuario?.Nombre ?? "N/A") @(Model.Usuario?.Apellido ?? "N/A")</h4>
-    <p>Profesión: @(Model.Profesion?.Nombre ?? "No disponible")</p>
-    <p>Experiencia: @(Model.Experiencia?.Descripcion ?? "No disponible")</p>
-    <p>Correo: @(Model.Usuario?.Correo ?? "No disponible")</p>
-    <p>Departamento: @(Model.Usuario?.Departamento?.Nombre ?? "No disponible")</p>
-    <!-- Mostrar CV si existe -->
-    @if (Model.CV != null)
-    {
-        <p><a href="@Url.Action("DownloadCV", "Profile", new { id = Model.Id })">Descargar CV</a></p>
-    }
-    <a href="@Url.Action("EditPostulante", "Profile")" class="btn btn-primary">Editar Perfil</a>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header text-center bg-secondary text-white">
+            <h2>Información Básica Postulante</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="./profile.jpg" alt="Foto de perfil" class="rounded-circle img-fluid mb-3">
+                </div>
+                <div class="col-md-8">
+                    <h4 class="mb-3">
+                        <strong>Nombre: </strong>@(Model.Usuario?.Nombre ?? "N/A") @(Model.Usuario?.Apellido ?? "N/A")
+                    </h4>
+                    <p class="mb-2">
+                        <strong>Profesión: </strong>@(Model.Profesion?.Nombre ?? "No disponible")
+                    </p>
+                    <p class="mb-2">
+                        <strong>Experiencia: </strong>@(Model.Experiencia?.Descripcion ?? "No disponible")
+                    </p>
+                    <p class="mb-2">
+                        <strong>Correo: </strong>@(Model.Usuario?.Correo ?? "No disponible")
+                    </p>
+                    <p class="mb-2">
+                        <strong>Departamento: </strong>@(Model.Usuario?.Departamento?.Nombre ?? "No disponible")
+                    </p>
+                    @if (Model.CV != null)
+                    {
+                        <p><a href="@Url.Action("DownloadCV", "Profile", new { id = Model.Id })">Descargar CV</a></p>
+                    }
+                    <a href="@Url.Action("EditPostulante", "Profile")" class="btn btn-primary">Editar Perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

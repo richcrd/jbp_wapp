@@ -1,9 +1,28 @@
 @model jbp_wapp.Models.Usuario
 
-<h2>Mi Información Básica</h2>
-<div>
-    <h4>Nombre: @(Model.Nombre ?? "N/A") @(Model.Apellido ?? "N/A")</h4>
-    <p>Correo: @(Model.Correo ?? "No disponible")</p>
-    <p>Departamento: @(Model.Departamento?.Nombre ?? "No disponible")</p>
-    <a href="@Url.Action("EditUsuario", "Profile")" class="btn btn-primary">Editar Información</a>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header text-center bg-secondary text-white">
+            <h2>Mi Información Básica</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="./profile.jpg" alt="Foto de perfil" class="rounded-circle img-fluid mb-3">
+                </div>
+                <div class="col-md-8">
+                    <h4 class="mb-3">
+                        <strong>Nombre:</strong> @(Model.Nombre ?? "N/A") @(Model.Apellido ?? "N/A")
+                    </h4>
+                    <p class="mb-2">
+                        <strong>Correo:</strong> @(Model.Correo ?? "No disponible")
+                    </p>
+                    <p class="mb-2">
+                        <strong>Departamento:</strong> @(Model.Departamento?.Nombre ?? "No disponible")
+                    </p>
+                    <a href="@Url.Action("EditUsuario", "Profile")" class="btn btn-primary btn-sm">Editar Información</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
