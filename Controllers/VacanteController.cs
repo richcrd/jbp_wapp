@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Claims;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace jbp_wapp.Controllers
 {
@@ -43,15 +46,39 @@ namespace jbp_wapp.Controllers
         }
         [Authorize(Roles = "1,2")]
         [HttpGet] // Autoriza a cualquier usuario pero que este autenticado
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string keyword, int? idExp, int? idProf)
         {
-            var vacantes = await _context.Vacantes
+            // Inicializamos la consulta como IQueryable
+            IQueryable<Vacante> query = _context.Vacantes
                 .Include(v => v.Usuario)
                 .Include(v => v.Profesion)
-                .Include(v => v.Experiencia)
-                .ToListAsync();
+                .Include(v => v.Experiencia);
 
-            return View(vacantes);
+            // Aplicar filtros si están presentes
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(v => v.Titulo.Contains(keyword) || v.Descripcion.Contains(keyword));
+            }
+
+            if (idExp.HasValue)
+            {
+                query = query.Where(v => v.IdExperiencia == idExp.Value);
+            }
+
+            if (idProf.HasValue)
+            {
+                query = query.Where(v => v.IdProfesion == idProf.Value);
+            }
+
+            // Obtener la lista de resultados
+            var listaVacantes = await query.ToListAsync();
+
+            // Enviar listas de selección para filtros
+            ViewData["Keyword"] = keyword;
+            ViewBag.Experiencias = new SelectList(await _context.Experiencias.ToListAsync(), "Id", "Descripcion", idExp);
+            ViewBag.Profesiones = new SelectList(await _context.Profesiones.ToListAsync(), "Id", "Nombre", idProf);
+
+            return View(listaVacantes);
         }
         
         // GET: Vacante/Create - Muestra el formulario de creación de vacantes
