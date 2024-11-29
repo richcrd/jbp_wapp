@@ -14,11 +14,11 @@
 </div>
 <script>
 function openVacanteModal(id) {
-    // Hacer la solicitud AJAX al servidor
+    // Solicitud AJAX
     fetch(`/Vacante/Details?id=${id}`)
-        .then(response => response.text())  // Esperamos HTML de la Partial View
+        .then(response => response.text())  // Esperamos el HTML de la Partial View
         .then(html => {
-            // Colocar el HTML recibido en el modal
+            // Colocamos el HTML recibido en el modal
             document.getElementById('vacanteModalBody').innerHTML = html;
             // Mostrar el modal
             var myModal = new bootstrap.Modal(document.getElementById('vacanteModal'));
