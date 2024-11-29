@@ -32,24 +32,16 @@ namespace jbp_wapp.Controllers
         [HttpGet]
         public async Task<IActionResult> Signup()
         {
-            // Si el usuario ya esta autenticado
-            if (User.Identity != null && User.Identity.IsAuthenticated) 
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            await VerificarAutenticacion();
             await CargarDatos();
             return View();
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
-            // Si el usuario ya esta autenticado
-            if (User.Identity != null && User.Identity.IsAuthenticated) 
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            await VerificarAutenticacion();
             return View();
         }
 
@@ -178,5 +170,14 @@ namespace jbp_wapp.Controllers
         {
             return View();
         }
+        
+        private async Task VerificarAutenticacion()
+        {
+            // Verifica si el usuario ya esta autenticado
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                RedirectToAction("Index", "Home");
+            }
+        }        
     }
 }
