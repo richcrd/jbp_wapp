@@ -1,0 +1,24 @@
+@model IEnumerable<jbp_wapp.Models.Aplicacion>
+
+<h1 class="text-center my-4">Mis Aplicaciones</h1>
+
+<div class="container">
+    @if (Model != null && Model.Any())
+    {
+        <div class="list-group">
+            @foreach (var aplicacion in Model)
+            {
+                <div class="list-group-item">
+                    <h5>@aplicacion.Vacante.Titulo</h5>
+                    <p>@aplicacion.Vacante.Descripcion</p>
+                    <small>Reclutador: @aplicacion.Vacante.Usuario.Nombre @aplicacion.Vacante.Usuario.Apellido</small>
+                    <p><strong>Fecha de Aplicación: </strong>@aplicacion.FechaAplicacion</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center">No has aplicado a ninguna vacante aún.</p>
+    }
+</div>

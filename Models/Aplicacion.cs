@@ -15,6 +15,7 @@ namespace jbp_wapp.Models
 
 
         // Relaciones
+        public ICollection<HistorialEstadoAplicaciones> HistorialEstadoAplicacion { get; set; }
         public virtual PerfilPostulante? PerfilPostulante { get; set; }
         public virtual Vacante? Vacante { get; set; }
     }

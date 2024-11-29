@@ -3,6 +3,23 @@
     ViewData["Title"] = "Todas las Vacantes";
 }
 
+<div id="alert-container">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
 <h1 class="text-center my-4">Todas las Vacantes</h1>
 
 <div class="container mb-5">
@@ -56,10 +73,14 @@
                             </small>
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="#" class="btn btn-primary btn-sm">Aplicar</a>
+                            <form method="post" action="/Vacante/Apply">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="vacanteId" value="@vacante.Id" />
+                                <button type="submit" class="btn btn-primary w-100">Aplicar</button>
+                            </form>
                             <button type="button" class="btn btn-outline-success btn-sm" onclick="openVacanteModal(@vacante.Id)">
                                 Detalles
-                            </button>
+                                </button>
                         </div>
                     </div>
                 </div>
@@ -75,3 +96,21 @@
 </div>
 
 @Html.Partial("ModalVacante")
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertContainer = document.getElementById("alert-container");
+
+        // Manejar mensajes en el cliente (opcional)
+        if (alertContainer) {
+            setTimeout(() => {
+                const alerts = alertContainer.querySelectorAll(".alert");
+                alerts.forEach(alert => {
+                    const bootstrapAlert = new bootstrap.Alert(alert);
+                    bootstrapAlert.close();
+                });
+            }, 5000); // Ocultar automáticamente después de 5 segundos
+        }
+    });
+</script>
+
