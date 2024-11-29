@@ -28,7 +28,9 @@
                     <div class="card border-dark">
                         <div class="card-body">
                             <h5 class="card-title">@vacante.Titulo</h5>
-                            <p class="card-text text-secondary">@vacante.Descripcion</p>
+                            <p class="card-text text-truncate" style="max-height: 3.6em; overflow: hidden;">
+                            @vacante.Descripcion
+                            </p>
                             <button class="btn btn-outline-success" onclick="openVacanteModal(@vacante.Id)">
                              Ver Detalles
                             </button>
