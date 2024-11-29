@@ -15,16 +15,27 @@ namespace jbp_wapp.Data
             {
                 if (Database.CanConnect())
                 {
-                    _logger.LogInformation("Conexion exitosa a la base de datos");
+                   _logger.LogInformation(@"
+                    ╔═════════════════════════════════════════════╗
+                    ║ ✅ Conexión exitosa a la base de datos.     ║
+                    ║ [Timestamp: {Timestamp}]                   ║
+                    ╚═════════════════════════════════════════════╝", DateTime.UtcNow);
+
                 }
                 else 
                 {
-                    _logger.LogInformation("No se pudo establecer la conexion a la BD");
+                    _logger.LogWarning(@"
+                    ╔════════════════════════════════════════════╗
+                    ║ ⚠️ No se pudo establecer conexión con la   ║
+                    ║      base de datos                         ║
+                    ║                                            ║
+                    ║ [Timestamp: {Timestamp}]                   ║
+                    ╚═════════════════════════════════════════════╝", DateTime.UtcNow);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al intentar conectar a la base de datos");
+                _logger.LogError(ex, " Error al intentar conectar a la base de datos: {ErrorMessage}", ex.Message);
             }
         }
 
