@@ -166,7 +166,7 @@ namespace jbp_wapp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AccessDenied()
+        public IActionResult AccessDenied()
         {
             return View();
         }
