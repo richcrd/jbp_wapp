@@ -36,7 +36,7 @@
                         <td>@vacante.FechaCreacion.ToString("dd/MM/yyyy")</td>
                         <td>
                             <div class="btn-group">
-                                <a class="btn btn-outline-primary btn-sm" title="Ver aplicantes">
+                                <a asp-controller="Vacante" asp-action="Applicants" asp-route-id="@vacante.Id" class="btn btn-outline-primary btn-sm" title="Ver aplicantes">
                                     <i class="bi bi-people"></i> Aplicantes
                                 </a>
                                 <a asp-controller="Vacante" asp-action="Delete" asp-route-id="@vacante.Id" 

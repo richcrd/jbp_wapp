@@ -1,0 +1,36 @@
+@model IEnumerable<dynamic>
+
+<h1 class="text-center my-4">Aplicantes para @ViewBag.VacanteTitulo</h1>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead class="table-light text-center">
+            <tr>
+                <th>Nombre Completo</th>
+                <th>Experiencia</th>
+                <th>Profesión</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Any())
+            {
+                @foreach (var aplicante in Model)
+                {
+                    <tr>
+                        <td>@aplicante.NombreCompleto</td>
+                        <td>@aplicante.Experiencia</td>
+                        <td>@aplicante.Profesion</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-3">
+                        No hay aplicantes para esta vacante.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

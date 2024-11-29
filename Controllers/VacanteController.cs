@@ -340,5 +340,31 @@ namespace jbp_wapp.Controllers
             TempData["SuccessMessage"] = "La aplicación se ha cancelado exitosamente";
             return RedirectToAction("Apps", "Vacante");
         }
+
+        [HttpGet]
+        [Authorize(Roles = "3")]
+        public IActionResult Applicants(int id)
+        {
+            var aplicantes = _context.Aplicaciones
+                .Where(a => a.IdVacante == id)
+                .Include(p => p.PerfilPostulante)
+                    .ThenInclude(p => p.Usuario)
+                .Include(a => a.PerfilPostulante.Experiencia)
+                .Include(a => a.PerfilPostulante.Profesion)
+                .Select(a => new
+                {
+                    NombreCompleto = a.PerfilPostulante.Usuario.Nombre + " " + a.PerfilPostulante.Usuario.Apellido,
+                    Experiencia = a.PerfilPostulante.Experiencia.Descripcion,
+                    Profesion = a.PerfilPostulante.Profesion.Nombre
+                })
+                .ToList();
+
+            ViewBag.VacanteTitulo = _context.Vacantes
+                .Where(v => v.Id == id)
+                .Select(v => v.Titulo)
+                .FirstOrDefault();
+
+            return View(aplicantes);
+        }
     }
 }
