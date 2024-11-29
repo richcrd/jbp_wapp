@@ -9,6 +9,7 @@
                 <th>Nombre Completo</th>
                 <th>Experiencia</th>
                 <th>Profesión</th>
+                <th>Descargar CV</th>
             </tr>
         </thead>
         <tbody>
@@ -20,13 +21,23 @@
                         <td>@aplicante.NombreCompleto</td>
                         <td>@aplicante.Experiencia</td>
                         <td>@aplicante.Profesion</td>
+                        <td class="text-center">
+                            @if (aplicante.PerfilPostulante != null && aplicante.PerfilPostulante.CV != null)
+                            {
+                                <p><a href="@Url.Action("DownloadCV", "Profile", new { id = aplicante.PerfilPostulante.Id })">Descargar CV</a></p>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No disponible</span>
+                            }
+                        </td>
                     </tr>
                 }
             }
             else
             {
                 <tr>
-                    <td colspan="3" class="text-center text-muted py-3">
+                    <td colspan="4" class="text-center text-muted py-3">
                         No hay aplicantes para esta vacante.
                     </td>
                 </tr>

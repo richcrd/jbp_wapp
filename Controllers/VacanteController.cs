@@ -355,7 +355,8 @@ namespace jbp_wapp.Controllers
                 {
                     NombreCompleto = a.PerfilPostulante.Usuario.Nombre + " " + a.PerfilPostulante.Usuario.Apellido,
                     Experiencia = a.PerfilPostulante.Experiencia.Descripcion,
-                    Profesion = a.PerfilPostulante.Profesion.Nombre
+                    Profesion = a.PerfilPostulante.Profesion.Nombre,
+                    PerfilPostulante = a.PerfilPostulante
                 })
                 .ToList();
 
