@@ -1,5 +1,22 @@
 @model IEnumerable<jbp_wapp.Models.Aplicacion>
 
+<div id="alert-container">
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
 <h1 class="text-center my-4">Mis Aplicaciones</h1>
 
 <div class="container">
@@ -13,6 +30,12 @@
                     <p>@aplicacion.Vacante.Descripcion</p>
                     <small>Reclutador: @aplicacion.Vacante.Usuario.Nombre @aplicacion.Vacante.Usuario.Apellido</small>
                     <p><strong>Fecha de Aplicación: </strong>@aplicacion.FechaAplicacion</p>
+
+                    <form asp-action="CancelApplication" asp-controller="Vacante" method="post" class="mt-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@aplicacion.Id"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                    </form>
                 </div>
             }
         </div>

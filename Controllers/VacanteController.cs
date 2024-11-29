@@ -299,5 +299,46 @@ namespace jbp_wapp.Controllers
             
             return View(aplicaciones);
         }
+
+        [HttpPost]
+        [Authorize(Roles = "1,2")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelApplication(int id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                TempData["ErrorMessage"] = "Debes iniciar sesión para cancelar una aplicación";
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            var postulante = await _context.PerfilPostulante
+                .FirstOrDefaultAsync(p => p.IdUsuario == userId);
+            
+            if (postulante == null)
+            {
+                TempData["ErrorMessage"] = "No tienes un perfil de postulante asociado";
+                return RedirectToAction("Apps", "Vacante");
+            }
+
+            // Buscar la aplicación
+            var aplicacion = await _context.Aplicaciones
+                .FirstOrDefaultAsync(a => a.Id == id && a.IdPostulante == postulante.Id);
+
+            if (aplicacion == null)
+            {
+                TempData["ErrorMessage"] = "No se encontró la aplicación que deseas cancelar";
+                return RedirectToAction("Apps", "Vacante");
+            }
+
+            // Eliminar la aplicación
+            _context.Aplicaciones.Remove(aplicacion);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "La aplicación se ha cancelado exitosamente";
+            return RedirectToAction("Apps", "Vacante");
+        }
     }
 }
