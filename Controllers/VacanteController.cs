@@ -223,9 +223,9 @@ namespace jbp_wapp.Controllers
 
             return PartialView("_VacanteDetails", vacante);
         }
-        
+
         [HttpPost]
-        [Authorize(Roles = "1,2")]
+        [Authorize(Roles = "2")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Apply(int vacanteId)
         {
@@ -244,7 +244,13 @@ namespace jbp_wapp.Controllers
 
             if (postulante == null)
             {
-                TempData["ErrorMessage"] = "No tienes un perfil de postulante asociado";
+                TempData["ErrorMessage"] = "No tienes un perfil de postulante asociado, ve a 'Perfil' y crea tu perfil";
+                return RedirectToAction("All", "Vacante");
+            }
+
+            if (postulante.CV == null || postulante.CV.Length == 0)
+            {
+                TempData["ErrorMessage"] = "Debes subir tu CV antes de aplicar";
                 return RedirectToAction("All", "Vacante");
             }
 
